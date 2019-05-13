@@ -1,0 +1,9 @@
+[submodule "inventory-service"]
+	path = inventory-service
+	url = https://github.impcloud.net/RSP-Inventory-Suite/inventory-service
+[submodule "rfid-alert-service"]
+	path = rfid-alert-service
+	url = https://github.impcloud.net/RSP-Inventory-Suite/rfid-alert-service
+[submodule "cloud-connector-service"]
+	path = cloud-connector-service
+	url = https://github.impcloud.net/RSP-Inventory-Suite/cloud-connector-service
