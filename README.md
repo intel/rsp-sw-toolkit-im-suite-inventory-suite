@@ -8,7 +8,7 @@ Installer for Inventory Suite and EdgeX services
 $ git clone --recurse-submodules https://github.impcloud.net/RSP-Inventory-Suite/inventory-suite.git
 ```
 
-## Deploy INventory Suite and EdgeX services
+## Deploy Inventory Suite and EdgeX services
 
 ```bash
 $ make run
