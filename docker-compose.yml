@@ -1,0 +1,174 @@
+/*
+ * INTEL CONFIDENTIAL
+ * Copyright (2017) Intel Corporation.
+ *
+ * The source code contained or described herein and all documents related to the source code ("Material")
+ * are owned by Intel Corporation or its suppliers or licensors. Title to the Material remains with
+ * Intel Corporation or its suppliers and licensors. The Material may contain trade secrets and proprietary
+ * and confidential information of Intel Corporation and its suppliers and licensors, and is protected by
+ * worldwide copyright and trade secret laws and treaty provisions. No part of the Material may be used,
+ * copied, reproduced, modified, published, uploaded, posted, transmitted, distributed, or disclosed in
+ * any way without Intel/'s prior express written permission.
+ * No license under any patent, copyright, trade secret or other intellectual property right is granted
+ * to or conferred upon you by disclosure or delivery of the Materials, either expressly, by implication,
+ * inducement, estoppel or otherwise. Any license under such intellectual property rights must be express
+ * and approved by Intel in writing.
+ * Unless otherwise agreed by Intel in writing, you may not remove or alter this notice or any other
+ * notice embedded in Materials by Intel or Intel's suppliers or licensors in any way.
+ */
+
+version: '3.4'
+
+volumes:
+  inventory-data:
+  intel-plugin:
+
+networks:
+  main-net:
+  internal-data-net:
+  edgex-network:
+
+services:  
+  
+  mongo-inventory:
+    image: mongo:3.4
+    #user: entry script switches to run as mongdb user
+    #command: ["mongod","--auth", "-f", "/etc/mongod.conf"]
+    networks:
+      internal-data-net:
+    logging:
+      options: {max-file: '5', max-size: 1000m}
+    volumes:
+      - "inventory-data:/data/db"   
+
+  inventory:
+    image: 280211473891.dkr.ecr.us-west-2.amazonaws.com/rsp/inventory-service@sha256:9004689ee1cf2635332a442c93e4dd7bcae739f5a787bea4ff199f7a841bd028
+#    image: 280211473891.dkr.ecr.us-west-2.amazonaws.com/rsp/inventory-service@sha256:7277a27eb07573ce2cef5db43113793200a4343b6701113dca0d5a69da7d22bc
+    user: "2000:2000"
+    ports:
+      - "8080:8080"
+    networks:
+      - edgex-network
+      - internal-data-net
+      - main-net
+    logging:
+      options: {max-file: '5', max-size: 1000m}
+    environment:
+      loggingLevel: "debug"
+      telemetryEndpoint: "http://telemetry:8086"
+      telemetryDataStoreName: "BadgerBay"
+      responseLimit: 10000
+      secureMode: "true"
+      skipCertVerify: "true"
+      port: "8080"
+      zeroMQ: "edgex-core-data:5563"
+      cloudConnectorUrl: "http://cloud-connector:8080"
+      mappingSkuUrl: "http://product-data:8080/skus/"
+      rfidAlertURL: "http://rfid-alert:8080"
+      serviceName: "Inventory Service"
+      databaseName: "inventory?authSource=admin"
+      ageOuts: "front:10,back:60"
+      dailyInventoryPercentage: "0.01"
+      probUnreadToRead: "0.20"
+      probInStoreRead: "0.75"
+      probExitError: "0.10"
+      purgingDays: "90"
+      serverReadTimeOutSeconds: 900
+      serverWriteTimeOutSeconds: 900
+      contextEventFilterProviderID: ""
+      contraEpcPartition: 5
+      triggerRulesEndpoint: "/triggerrules"
+      triggerRulesOnFixedTags: "true"
+      newerHandheldHavePriority: "true"
+      cloudConnectorApiGatewayEndpoint: "/callwebhook"
+      rfidAlertMessageEndpoint: "/rfid-alert/alertmessage"
+      eventDestination: "https://5w1qbo67lh.execute-api.us-west-2.amazonaws.com/dev/events"
+      eventDestinationAuthEndpoint: ""
+      eventDestinationAuthType: ""
+      eventDestinationClientID: ""
+      eventDestinationClientSecret: ""
+      dailyInventoryPercentageLabel: "daily_turn"
+      probUnreadToReadLabel: "becoming_readable"
+      probInStoreReadLabel: "being_read"
+      probExitErrorLabel: "exit_error"
+      endpointConnectionTimedOutSeconds: 15
+      advancedShippingNoticeFacilityID: "UNDEFINED_FACILITY"
+      rulesUrl: ""
+      cloudConnectorRetrySeconds: 30
+      proprietaryTagFormat: "header.serialNumber.productID"
+      proprietaryTagBitBoundary: "8.44.44"
+      tagURIAuthorityName: "example.com"
+      tagURIAuthorityDate: "2019-01-01"
+      dailyTurnMinimumDataPoints: 2
+      dailyTurnHistoryMaximum: 25
+      dailyTurnComputeUsingMedian: "false"
+      useComputedDailyTurnInConfidence: "true"
+      probPlugin: "true"
+    volumes:
+      - "intel-plugin:/tmp"
+
+  rfid-alert:
+    image: 280211473891.dkr.ecr.us-west-2.amazonaws.com/rsp/rfid-alert-service@sha256:6dfab938b4be9acc769de0a73e60d0cbd30f637d520ad0ff9ba335b8aaa27e08
+    user: "2000:2000"
+    networks:
+      main-net:
+      edgex-network:
+    logging:
+      options: {max-file: '5', max-size: 1000m}
+    environment:
+      loggingLevel: "debug"
+      telemetryEndpoint: "http://telemetry:8086"
+      telemetryDataStoreName: "BadgerBay"
+      responseLimit: 10000
+      secureMode: "true"
+      skipCertVerify: "true"
+      port: "8080"
+      zeroMQ: "edgex-core-data:5563"
+      cloudConnectorURL: "http://cloud-connector:8080"
+      mappingSkuURL : "http://product-data:8080"
+      watchdogSeconds: 120
+      serviceName: "RFID Alert service"
+      maxMissedHeartbeats: 3
+      notificationChanSize: 100
+      cloudConnectorEndpoint: "/callwebhook"
+      heartbeatEndpoint: "/heartbeat"
+      mappingSkuEndpoint: "/skus"
+      alertDestination: "https://5w1qbo67lh.execute-api.us-west-2.amazonaws.com/dev/alerts"
+      heartbeatDestination: "https://5w1qbo67lh.execute-api.us-west-2.amazonaws.com/dev/heartbeats"
+      batchSizeMax: 50
+      sendNotWhitelistedAlert: "false"
+      epcToWrin: "false"
+      alertDestinationAuthEndpoint: ""
+      alertDestinationAuthType: ""
+      alertDestinationClientID: ""
+      alertDestinationClientSecret: ""
+
+  # Intel Probabilistic Inventory Algorithm
+  probabilistic-algorithm:
+    image: 280211473891.dkr.ecr.us-west-2.amazonaws.com/rsp/inventory-probabilistic-algo@sha256:e11542af353882d44356df25e4e0f013e759b44240b045939d20b1d0fb9d9583
+    networks:
+      - internal-data-net
+    volumes:
+      - "intel-plugin:/app"
+
+  cloud-connector:
+    image: 280211473891.dkr.ecr.us-west-2.amazonaws.com/cloud-connector-service@sha256:8f7356f7ed9c3b9edde01b618fdf4266983ff42e89d9a5d30b90ff575f70610b
+    user: "2000:2000"
+    networks:
+      main-net:
+    logging:
+      options:
+        max-size: "1000m"
+        max-file: "5"
+    environment:
+      loggingLevel: "debug"
+      telemetryEndpoint: "http://telemetry:8086"
+      telemetryDataStoreName: "BadgerBay"
+      responseLimit: 10000
+      secureMode: "true"
+      skipCertVerify: "true"
+      port: "8080"
+      consulConfigKey: "config/core-services-app"
+      consulUrl : "http://consul:8500/v1/kv"
+      serviceName: "Cloud Connector Service"
+      httpsProxyURL: "http://proxy-us.intel.com:912"
