@@ -1,21 +1,19 @@
-/*
- * INTEL CONFIDENTIAL
- * Copyright (2017) Intel Corporation.
- *
- * The source code contained or described herein and all documents related to the source code ("Material")
- * are owned by Intel Corporation or its suppliers or licensors. Title to the Material remains with
- * Intel Corporation or its suppliers and licensors. The Material may contain trade secrets and proprietary
- * and confidential information of Intel Corporation and its suppliers and licensors, and is protected by
- * worldwide copyright and trade secret laws and treaty provisions. No part of the Material may be used,
- * copied, reproduced, modified, published, uploaded, posted, transmitted, distributed, or disclosed in
- * any way without Intel/'s prior express written permission.
- * No license under any patent, copyright, trade secret or other intellectual property right is granted
- * to or conferred upon you by disclosure or delivery of the Materials, either expressly, by implication,
- * inducement, estoppel or otherwise. Any license under such intellectual property rights must be express
- * and approved by Intel in writing.
- * Unless otherwise agreed by Intel in writing, you may not remove or alter this notice or any other
- * notice embedded in Materials by Intel or Intel's suppliers or licensors in any way.
- */
+# INTEL CONFIDENTIAL
+# Copyright (2017) Intel Corporation.
+
+# The source code contained or described herein and all documents related to the source code ("Material")
+# are owned by Intel Corporation or its suppliers or licensors. Title to the Material remains with
+# Intel Corporation or its suppliers and licensors. The Material may contain trade secrets and proprietary
+# and confidential information of Intel Corporation and its suppliers and licensors, and is protected by
+# worldwide copyright and trade secret laws and treaty provisions. No part of the Material may be used,
+# copied, reproduced, modified, published, uploaded, posted, transmitted, distributed, or disclosed in
+# any way without Intel/'s prior express written permission.
+# No license under any patent, copyright, trade secret or other intellectual property right is granted
+# to or conferred upon you by disclosure or delivery of the Materials, either expressly, by implication,
+# inducement, estoppel or otherwise. Any license under such intellectual property rights must be express
+# and approved by Intel in writing.
+# Unless otherwise agreed by Intel in writing, you may not remove or alter this notice or any other
+# notice embedded in Materials by Intel or Intel's suppliers or licensors in any way. 
 
 version: '3.4'
 
@@ -42,8 +40,7 @@ services:
       - "inventory-data:/data/db"   
 
   inventory:
-    image: 280211473891.dkr.ecr.us-west-2.amazonaws.com/rsp/inventory-service@sha256:9004689ee1cf2635332a442c93e4dd7bcae739f5a787bea4ff199f7a841bd028
-#    image: 280211473891.dkr.ecr.us-west-2.amazonaws.com/rsp/inventory-service@sha256:7277a27eb07573ce2cef5db43113793200a4343b6701113dca0d5a69da7d22bc
+    image: rsp/inventory-service:dev
     user: "2000:2000"
     ports:
       - "8080:8080"
@@ -54,7 +51,9 @@ services:
     logging:
       options: {max-file: '5', max-size: 1000m}
     environment:
+      connectionString: "mongodb://mongo-inventory:27017"
       loggingLevel: "debug"
+      epcFilters: "[]"
       telemetryEndpoint: "http://telemetry:8086"
       telemetryDataStoreName: "BadgerBay"
       responseLimit: 10000
@@ -108,14 +107,14 @@ services:
       - "intel-plugin:/tmp"
 
   rfid-alert:
-    image: 280211473891.dkr.ecr.us-west-2.amazonaws.com/rsp/rfid-alert-service@sha256:6dfab938b4be9acc769de0a73e60d0cbd30f637d520ad0ff9ba335b8aaa27e08
+    image: rsp/rfid-alert-service:dev
     user: "2000:2000"
     networks:
       main-net:
       edgex-network:
     logging:
       options: {max-file: '5', max-size: 1000m}
-    environment:
+    environment:      
       loggingLevel: "debug"
       telemetryEndpoint: "http://telemetry:8086"
       telemetryDataStoreName: "BadgerBay"
@@ -143,32 +142,43 @@ services:
       alertDestinationClientID: ""
       alertDestinationClientSecret: ""
 
+  cloud-connector:
+      image: rsp/cloud-connector-service:dev
+      user: "2000:2000"
+      networks:
+        main-net:
+      logging:
+        options:
+          max-size: "1000m"
+          max-file: "5"
+      environment:
+        loggingLevel: "debug"
+        telemetryEndpoint: "http://telemetry:8086"
+        telemetryDataStoreName: "BadgerBay"
+        responseLimit: 10000
+        secureMode: "true"
+        skipCertVerify: "true"
+        port: "8080"
+        consulConfigKey: "config/core-services-app"
+        consulUrl : "http://consul:8500/v1/kv"
+        serviceName: "Cloud Connector Service"
+        httpsProxyURL: "http://proxy-us.intel.com:912"
+
+  consul:
+    image: 280211473891.dkr.ecr.us-west-2.amazonaws.com/rrp-consul@sha256:367e96b4ce7242e5eee385d9032dbd37736fc4d19a7531903e3ac0fc194383dc
+    user: "consul:consul"
+    command: agent -ui -data-dir /consul/data -client 0.0.0.0 -server -bootstrap
+    environment:
+      CONSUL_BIND_INTERFACE: "eth1"
+    networks:
+      main-net:
+    volumes:
+      - consul-rrp:/consul/data
+
   # Intel Probabilistic Inventory Algorithm
   probabilistic-algorithm:
     image: 280211473891.dkr.ecr.us-west-2.amazonaws.com/rsp/inventory-probabilistic-algo@sha256:e11542af353882d44356df25e4e0f013e759b44240b045939d20b1d0fb9d9583
     networks:
       - internal-data-net
     volumes:
-      - "intel-plugin:/app"
-
-  cloud-connector:
-    image: 280211473891.dkr.ecr.us-west-2.amazonaws.com/cloud-connector-service@sha256:8f7356f7ed9c3b9edde01b618fdf4266983ff42e89d9a5d30b90ff575f70610b
-    user: "2000:2000"
-    networks:
-      main-net:
-    logging:
-      options:
-        max-size: "1000m"
-        max-file: "5"
-    environment:
-      loggingLevel: "debug"
-      telemetryEndpoint: "http://telemetry:8086"
-      telemetryDataStoreName: "BadgerBay"
-      responseLimit: 10000
-      secureMode: "true"
-      skipCertVerify: "true"
-      port: "8080"
-      consulConfigKey: "config/core-services-app"
-      consulUrl : "http://consul:8500/v1/kv"
-      serviceName: "Cloud Connector Service"
-      httpsProxyURL: "http://proxy-us.intel.com:912"
+      - "intel-plugin:/app"  

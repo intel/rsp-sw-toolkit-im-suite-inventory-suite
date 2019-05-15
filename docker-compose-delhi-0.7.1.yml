@@ -31,6 +31,8 @@ networks:
 #################################################################
 # Edgex Delhi
 #################################################################
+services:
+
   volume:
     image: edgexfoundry/docker-edgex-volume:0.6.0    
     networks:

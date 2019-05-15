@@ -1,55 +1,67 @@
-.PHONY: docker
+ # INTEL CONFIDENTIAL
+ # Copyright (2017) Intel Corporation.
+ #
+ # The source code contained or described herein and all documents related to the source code ("Material")
+ # are owned by Intel Corporation or its suppliers or licensors. Title to the Material remains with
+ # Intel Corporation or its suppliers and licensors. The Material may contain trade secrets and proprietary
+ # and confidential information of Intel Corporation and its suppliers and licensors, and is protected by
+ # worldwide copyright and trade secret laws and treaty provisions. No part of the Material may be used,
+ # copied, reproduced, modified, published, uploaded, posted, transmitted, distributed, or disclosed in
+ # any way without Intel/'s prior express written permission.
+ # No license under any patent, copyright, trade secret or other intellectual property right is granted
+ # to or conferred upon you by disclosure or delivery of the Materials, either expressly, by implication,
+ # inducement, estoppel or otherwise. Any license under such intellectual property rights must be express
+ # and approved by Intel in writing.
+ # Unless otherwise agreed by Intel in writing, you may not remove or alter this notice or any other
+ # notice embedded in Materials by Intel or Intel's suppliers or licensors in any way.
 
-SERVICES=inventory-service cloud-connector-service rfid-alert-service
+.PHONY: build deploy stop
+
+MICROSERVICES=inventory-service cloud-connector-service rfid-alert-service
+.PHONY: $(MICROSERVICES)
 
 GIT_SHA=$(shell git rev-parse HEAD)
-
-GIT_TOKEN=4f5abe72b7afd9dcd47e1d063383f56bdba6f5bb
 proxy_http=http://proxy-chain.intel.com:911
 proxy_https=http://proxy-chain.intel.com:912
 
-run: $(SERVICES) inventory edgex deploy
+build: $(MICROSERVICES)
 
 inventory-service:
 	docker build \
-		--build-arg GIT_TOKEN=$(GIT_TOKEN)
-		--build-arg proxy_http=$(proxy_http)
-		--build-arg proxy_https=$(proxy_https)
+		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
+		--build-arg http_proxy=$(proxy_http) \
+		--build-arg https_proxy=$(proxy_https) \
 		-f inventory-service/Dockerfile_dev \
 		--label "git_sha=$(GIT_SHA)" \
-		-t rsp/inventory-service:$(GIT_SHA) \		
-		.
+		 -t rsp/inventory-service:$(GIT_SHA) -t rsp/inventory-service:dev \
+		 ./inventory-service
 
 cloud-connector-service:
 	docker build \
-		--build-arg GIT_TOKEN=$(GIT_TOKEN)
-		--build-arg proxy_http=$(proxy_http)
-		--build-arg proxy_https=$(proxy_https)
+		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
+		--build-arg http_proxy=$(proxy_http) \
+		--build-arg https_proxy=$(proxy_https) \
 		-f cloud-connector-service/Dockerfile_dev \
 		--label "git_sha=$(GIT_SHA)" \
-		-t rsp/cloud-connector-service:$(GIT_SHA) \		
-		.
+		 -t rsp/cloud-connector-service:$(GIT_SHA) -t rsp/cloud-connector-service:dev \
+		 ./cloud-connector-service
 
 rfid-alert-service:
 	docker build \
-		--build-arg GIT_TOKEN=$(GIT_TOKEN)
-		--build-arg proxy_http=$(proxy_http)
-		--build-arg proxy_https=$(proxy_https)
+		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
+		--build-arg http_proxy=$(proxy_http) \
+		--build-arg https_proxy=$(proxy_https) \
 		-f rfid-alert-service/Dockerfile_dev \
 		--label "git_sha=$(GIT_SHA)" \
-		-t rsp/rfid-alert-service:$(GIT_SHA) \		
-		.
+		-t rsp/rfid-alert-service:$(GIT_SHA) -t rsp/rfid-alert-service:dev \
+		./rfid-alert-service
 		
-inventory:
-	docker-compose pull 
-
-edgex:
-	docker-compose pull -f docker-compose-edgex-delhi.yml
-
 deploy:
 	docker stack deploy \
 		--with-registry-auth \
 		--compose-file docker-compose.yml \
-		--compose-file docker-compose-edgex-delhi.yml \
+		--compose-file docker-compose-delhi-0.7.1.yml \
 		Inventory-Suite
 
+stop:
+	docker stack rm Inventory-Suite
