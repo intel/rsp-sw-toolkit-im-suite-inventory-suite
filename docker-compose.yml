@@ -30,8 +30,6 @@ services:
   
   mongo-inventory:
     image: mongo:3.4
-    #user: entry script switches to run as mongdb user
-    #command: ["mongod","--auth", "-f", "/etc/mongod.conf"]
     networks:
       internal-data-net:
     logging:
@@ -143,37 +141,48 @@ services:
       alertDestinationClientSecret: ""
 
   cloud-connector:
-      image: rsp/cloud-connector-service:dev
-      user: "2000:2000"
-      networks:
-        main-net:
-      logging:
-        options:
-          max-size: "1000m"
-          max-file: "5"
-      environment:
-        loggingLevel: "debug"
-        telemetryEndpoint: "http://telemetry:8086"
-        telemetryDataStoreName: "BadgerBay"
-        responseLimit: 10000
-        secureMode: "true"
-        skipCertVerify: "true"
-        port: "8080"
-        consulConfigKey: "config/core-services-app"
-        consulUrl : "http://consul:8500/v1/kv"
-        serviceName: "Cloud Connector Service"
-        httpsProxyURL: "http://proxy-us.intel.com:912"
-
-  consul:
-    image: 280211473891.dkr.ecr.us-west-2.amazonaws.com/rrp-consul@sha256:367e96b4ce7242e5eee385d9032dbd37736fc4d19a7531903e3ac0fc194383dc
-    user: "consul:consul"
-    command: agent -ui -data-dir /consul/data -client 0.0.0.0 -server -bootstrap
-    environment:
-      CONSUL_BIND_INTERFACE: "eth1"
+    image: rsp/cloud-connector-service:dev
+    user: "2000:2000"
     networks:
-      main-net:
-    volumes:
-      - consul-rrp:/consul/data
+       main-net:
+    logging:
+      options:
+        max-size: "1000m"
+        max-file: "5"
+    environment:
+      loggingLevel: "debug"
+      telemetryEndpoint: "http://telemetry:8086"
+      telemetryDataStoreName: "BadgerBay"
+      responseLimit: 10000
+      secureMode: "true"
+      skipCertVerify: "true"
+      port: "8080"
+      serviceName: "Cloud Connector Service"
+      httpsProxyURL: "http://proxy-us.intel.com:912"
+
+  product-data:
+    image: rsp/product-data-service:dev
+    user: "2000:2000"
+    ports:
+      - "8081:8080"
+    networks:
+      - internal-data-net
+      - main-net
+    logging:
+      options: {max-file: '5', max-size: 1000m}
+    environment:
+      skipSAF: "true"
+      connectionString: "mongodb://mongo-inventory:27017"
+      contextSdk: ""
+      loggingLevel: "debug"
+      telemetryEndpoint: "http://telemetry:8086"
+      telemetryDataStoreName: "BadgerBay"
+      responseLimit: 10000
+      secureMode: "true"
+      skipCertVerify: "true"
+      port: "8080"
+      serviceName: "Product Data Service"
+      databaseName: "mapping?authSource=admin"
 
   # Intel Probabilistic Inventory Algorithm
   probabilistic-algorithm:

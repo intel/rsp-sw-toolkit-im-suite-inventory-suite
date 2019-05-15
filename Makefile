@@ -17,7 +17,7 @@
 
 .PHONY: build deploy stop
 
-MICROSERVICES=inventory-service cloud-connector-service rfid-alert-service
+MICROSERVICES=inventory-service cloud-connector-service rfid-alert-service product-data-service
 .PHONY: $(MICROSERVICES)
 
 GIT_SHA=$(shell git rev-parse HEAD)
@@ -55,6 +55,16 @@ rfid-alert-service:
 		--label "git_sha=$(GIT_SHA)" \
 		-t rsp/rfid-alert-service:$(GIT_SHA) -t rsp/rfid-alert-service:dev \
 		./rfid-alert-service
+
+product-data-service:
+	docker build \
+		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
+		--build-arg http_proxy=$(proxy_http) \
+		--build-arg https_proxy=$(proxy_https) \
+		-f product-data-service/Dockerfile_dev \
+		--label "git_sha=$(GIT_SHA)" \
+		-t rsp/product-data-service:$(GIT_SHA) -t rsp/product-data-service:dev \
+		./product-data-service
 		
 deploy:
 	docker stack deploy \

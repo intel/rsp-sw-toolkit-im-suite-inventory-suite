@@ -7,3 +7,6 @@
 [submodule "cloud-connector-service"]
 	path = cloud-connector-service
 	url = https://github.impcloud.net/RSP-Inventory-Suite/cloud-connector-service
+[submodule "product-data-service"]
+	path = product-data-service
+	url = https://github.impcloud.net/RSP-Inventory-Suite/product-data-service.git
