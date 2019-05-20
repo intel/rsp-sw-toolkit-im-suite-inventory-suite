@@ -27,7 +27,7 @@ proxy_https=http://proxy-chain.intel.com:912
 build: $(MICROSERVICES)
 
 inventory-service:
-	docker build --no-cache \
+	docker build \
 		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
 		--build-arg http_proxy=$(proxy_http) \
 		--build-arg https_proxy=$(proxy_https) \
