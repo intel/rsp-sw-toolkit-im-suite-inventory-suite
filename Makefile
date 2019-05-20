@@ -71,7 +71,7 @@ deploy:
 		--with-registry-auth \
 		--compose-file docker-compose.yml \
 		--compose-file docker-compose-delhi-0.7.1.yml \
-		Inventory-Suite
+		Inventory-Suite-Dev
 
 stop:
-	docker stack rm Inventory-Suite
+	docker stack rm Inventory-Suite-Dev

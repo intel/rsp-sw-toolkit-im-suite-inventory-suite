@@ -37,7 +37,7 @@ services:
     volumes:
       - "inventory-data:/data/db"   
 
-  inventory:
+  inventory:    
     image: rsp/inventory-service:dev
     user: "2000:2000"
     ports:
@@ -186,7 +186,7 @@ services:
 
   # Intel Probabilistic Inventory Algorithm
   probabilistic-algorithm:
-    image: 280211473891.dkr.ecr.us-west-2.amazonaws.com/rsp/inventory-probabilistic-algo@sha256:e11542af353882d44356df25e4e0f013e759b44240b045939d20b1d0fb9d9583
+    image: 280211473891.dkr.ecr.us-west-2.amazonaws.com/rsp/inventory-probabilistic-algo@sha256:98c05f685e5e5b1b1cd6fab50fe12cbc935c2774099b0f7135f403d962e8f546
     networks:
       - internal-data-net
     volumes:
