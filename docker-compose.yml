@@ -25,6 +25,9 @@ networks:
   main-net:
   internal-data-net:
   edgex-network:
+  mqtt-net:
+    external:
+      name: "Inventory-Suite_mqtt-net"
 
 services:  
   
@@ -184,9 +187,24 @@ services:
       serviceName: "Product Data Service"
       databaseName: "mapping?authSource=admin"
 
+  mqtt-device-service:
+    image: rsp/mqtt-device-service:dev
+    ports:
+      - "49982:49982"
+    networks:
+      - edgex-network      
+      - mqtt-net
+    depends_on:
+      - edgex-core-data
+      - edgex-core-command
+    volumes:
+      - db-data:/data/db
+      - log-data:/edgex/logs
+      - consul-config:/consul/config
+
   # Intel Probabilistic Inventory Algorithm
-  probabilistic-algorithm:
-    image: 280211473891.dkr.ecr.us-west-2.amazonaws.com/rsp/inventory-probabilistic-algo@sha256:98c05f685e5e5b1b1cd6fab50fe12cbc935c2774099b0f7135f403d962e8f546
+  inventory-probabilistic-algo:
+    image: rsp/inventory-probabilistic-algo:dev
     networks:
       - internal-data-net
     volumes:

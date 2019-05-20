@@ -2,3 +2,5 @@ cloud-connector-service/
 inventory-service/
 rfid-alert-service/
 product-data-service/
+inventory-probabilistic-algo/
+mqtt-device-service/

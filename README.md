@@ -17,8 +17,14 @@ $ git clone --recurse-submodules https://github.impcloud.net/RSP-Inventory-Suite
 ## Deploy Inventory Suite and EdgeX services
 
 ```bash
-$ GIT_TOKEN=[your_impcloud_token] make build
+$ GIT_TOKEN=your_impcloud_token make build
 $ make deploy
+```
+
+## Stop services
+
+```bash
+$ make stop
 ```
 
 ## Note
