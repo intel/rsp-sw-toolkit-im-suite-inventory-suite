@@ -7,12 +7,12 @@
 [submodule "mqtt-device-service"]
 	path = mqtt-device-service
 	url = https://github.impcloud.net/RSP-Inventory-Suite/mqtt-device-service.git
-[submodule "inventory-service"]
-	path = inventory-service
-	url = https://github.impcloud.net/RSP-Inventory-Suite/inventory-service.git
 [submodule "cloud-connector-service"]
 	path = cloud-connector-service
 	url = https://github.impcloud.net/RSP-Inventory-Suite/cloud-connector-service.git
 [submodule "rfid-alert-service"]
 	path = rfid-alert-service
 	url = https://github.impcloud.net/RSP-Inventory-Suite/rfid-alert-service.git
+[submodule "inventory-service"]
+	path = inventory-service
+	url = https://github.impcloud.net/RSP-Inventory-Suite/inventory-service.git
