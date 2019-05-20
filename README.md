@@ -8,6 +8,8 @@ Installer for Inventory Suite and EdgeX services
 
 [Docker-compose](https://docs.docker.com/compose/install/)
 
+Mqtt-Moquitto broker from RFID-Controller must be running. This creates **Inventory-Suite_mqtt-net** docker network
+
 ## Clone repo and submodules
 
 ```bash
