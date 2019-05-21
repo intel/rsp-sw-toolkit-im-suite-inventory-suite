@@ -111,8 +111,8 @@ services:
     image: rsp/rfid-alert-service:dev
     user: "2000:2000"
     networks:
-      main-net:
-      edgex-network:
+      - main-net
+      - edgex-network
     logging:
       options: {max-file: '5', max-size: 1000m}
     environment:      
@@ -147,7 +147,7 @@ services:
     image: rsp/cloud-connector-service:dev
     user: "2000:2000"
     networks:
-       main-net:
+       - main-net
     logging:
       options:
         max-size: "1000m"
