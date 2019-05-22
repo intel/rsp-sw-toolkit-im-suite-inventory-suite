@@ -105,7 +105,7 @@ services:
       useComputedDailyTurnInConfidence: "true"
       probPlugin: "true"
     volumes:
-      - "intel-plugin:/tmp"
+      - "intel-plugin:/plugin"
 
   rfid-alert:
     image: rsp/rfid-alert-service:dev
