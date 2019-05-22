@@ -11,14 +11,21 @@ Mqtt-Moquitto broker from RFID-Controller must be running. This creates **Invent
 ## Clone repo and submodules
 
 ```bash
-$ git clone --recurse-submodules https://github.impcloud.net/RSP-Inventory-Suite/inventory-suite.git
+$ git clone -b grafana --recurse-submodules https://github.impcloud.net/RSP-Inventory-Suite/inventory-suite.git
 ```
 
 ## Deploy Inventory Suite and EdgeX services
 
+Note: You may need to run these commands as **sudo** 
+
 ```bash
 $ GIT_TOKEN=your_impcloud_token make build
 $ make deploy
+```
+If you are behind an enterprise proxy, add env variables to make build as:
+
+```bash
+$ GIT_TOKEN=your_impcloud_token http_proxy=proxy_url https_proxy=proxy_url make build
 ```
 
 ## Stop services
@@ -26,7 +33,3 @@ $ make deploy
 ```bash
 $ make stop
 ```
-
-## Note
-
-If you are running behind proxies, edit Makefile proxy env variables.
