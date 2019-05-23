@@ -38,7 +38,7 @@ cloud-connector-service:
 	docker build \
 		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
 		--build-arg http_proxy=$(http_proxy) \
-		--build-arg https_proxy=$(http_proxys) \
+		--build-arg https_proxy=$(https_proxy) \
 		-f cloud-connector-service/Dockerfile_dev \
 		--label "git_sha=$(GIT_SHA)" \
 		 -t rsp/cloud-connector-service:$(GIT_SHA) -t rsp/cloud-connector-service:dev \
@@ -48,7 +48,7 @@ rfid-alert-service:
 	docker build \
 		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
 		--build-arg http_proxy=$(http_proxy) \
-		--build-arg https_proxy=$(http_proxys) \
+		--build-arg https_proxy=$(https_proxy) \
 		-f rfid-alert-service/Dockerfile_dev \
 		--label "git_sha=$(GIT_SHA)" \
 		-t rsp/rfid-alert-service:$(GIT_SHA) -t rsp/rfid-alert-service:dev \
@@ -58,7 +58,7 @@ product-data-service:
 	docker build \
 		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
 		--build-arg http_proxy=$(http_proxy) \
-		--build-arg https_proxy=$(http_proxys) \
+		--build-arg https_proxy=$(https_proxy) \
 		-f product-data-service/Dockerfile_dev \
 		--label "git_sha=$(GIT_SHA)" \
 		-t rsp/product-data-service:$(GIT_SHA) -t rsp/product-data-service:dev \
@@ -68,7 +68,7 @@ inventory-probabilistic-algo:
 	docker build \
 		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
 		--build-arg http_proxy=$(http_proxy) \
-		--build-arg https_proxy=$(http_proxys) \
+		--build-arg https_proxy=$(https_proxy) \
 		-f inventory-probabilistic-algo/Dockerfile_dev \
 		--label "git_sha=$(GIT_SHA)" \
 		-t rsp/inventory-probabilistic-algo:$(GIT_SHA) -t rsp/inventory-probabilistic-algo:dev \
@@ -78,7 +78,7 @@ mqtt-device-service:
 	docker build \
 		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
 		--build-arg http_proxy=$(http_proxy) \
-		--build-arg https_proxy=$(http_proxys) \
+		--build-arg https_proxy=$(https_proxy) \
 		-f mqtt-device-service/Dockerfile_dev \
 		--label "git_sha=$(GIT_SHA)" \
 		-t rsp/mqtt-device-service:$(GIT_SHA) -t rsp/mqtt-device-service:dev \
