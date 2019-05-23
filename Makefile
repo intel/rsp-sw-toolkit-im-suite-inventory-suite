@@ -21,8 +21,6 @@ MICROSERVICES=inventory-service cloud-connector-service rfid-alert-service produ
 .PHONY: $(MICROSERVICES)
 
 GIT_SHA=$(shell git rev-parse HEAD)
-http_proxy=http://proxy-chain.intel.com:911
-https_proxy=http://proxy-chain.intel.com:912
 
 build: $(MICROSERVICES)
 
