@@ -25,7 +25,7 @@ GIT_SHA=$(shell git rev-parse HEAD)
 build: $(MICROSERVICES)
 
 inventory-service:
-	docker build --no-cache \
+	docker build \
 		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
 		--build-arg http_proxy=$(http_proxy) \
 		--build-arg https_proxy=$(https_proxy) \
