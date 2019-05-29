@@ -25,7 +25,7 @@ $ set +x && echo "https://YOUR_GIT_TOKEN:x-oauth-basic@github.impcloud.net" > ~/
 ```
 
 ```bash
-$ git clone -b grafana --recurse-submodules https://github.impcloud.net/RSP-Inventory-Suite/inventory-suite.git
+$ git clone --recurse-submodules https://github.impcloud.net/RSP-Inventory-Suite/inventory-suite.git
 ```
 
 ## Deploy Inventory Suite and EdgeX services
@@ -33,21 +33,21 @@ $ git clone -b grafana --recurse-submodules https://github.impcloud.net/RSP-Inve
 Note: You may need to run these commands as **sudo** 
 
 ```bash
-$ GIT_TOKEN=your_impcloud_token make build
+$ sudo GIT_TOKEN=your_impcloud_token make build
 ```
 **(if you have a fresh installation of Docker, initialize docker swarm)**
 ```bash
-$ docker swarm init
-$ make deploy
+$ sudo docker swarm init
+$ sudo make deploy
 ```
 If you are behind an enterprise proxy, add env variables to make build as:
 
 ```bash
-$ GIT_TOKEN=your_impcloud_token http_proxy=proxy_url https_proxy=proxy_url make build
+$ sudo GIT_TOKEN=your_impcloud_token http_proxy=proxy_url https_proxy=proxy_url make build
 ```
 
 ## Stop services
 
 ```bash
-$ make stop
+$ sudo make stop
 ```
