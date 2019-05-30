@@ -16,3 +16,7 @@
 [submodule "inventory-service"]
 	path = inventory-service
 	url = https://github.impcloud.net/RSP-Inventory-Suite/inventory-service.git
+[submodule "telemetry-dashboard"]
+	path = telemetry-dashboard
+	url = https://github.impcloud.net/Responsive-Retail-Inventory/telemetry-dashboard.git
+	branch = badgerbay
