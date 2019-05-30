@@ -35,6 +35,7 @@ Note: You may need to run these commands as **sudo**
 ```bash
 $ sudo GIT_TOKEN=your_impcloud_token make build
 ```
+
 **(if you have a fresh installation of Docker, initialize docker swarm)**
 ```bash
 $ sudo docker swarm init
