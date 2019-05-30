@@ -6,13 +6,6 @@ Installer for Inventory Suite and EdgeX services
 
 [Docker engine](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 
-### For Ubuntu 18.04 and above
-
-```bash
-$ sudo apt update
-$ sudo apt install docker.io make git
-```
-
 Mqtt-Moquitto broker from RFID-Controller must be running. This creates **Inventory-Suite_mqtt-net** docker network
 
 ## Clone repo and submodules
