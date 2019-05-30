@@ -1,21 +1,27 @@
 [submodule "product-data-service"]
 	path = product-data-service
 	url = https://github.impcloud.net/RSP-Inventory-Suite/product-data-service.git
+	branch = master
 [submodule "inventory-probabilistic-algo"]
 	path = inventory-probabilistic-algo
 	url = https://github.impcloud.net/RSP-Inventory-Suite/inventory-probabilistic-algo.git
+	branch = master
 [submodule "mqtt-device-service"]
 	path = mqtt-device-service
 	url = https://github.impcloud.net/RSP-Inventory-Suite/mqtt-device-service.git
+	branch = master
 [submodule "cloud-connector-service"]
 	path = cloud-connector-service
 	url = https://github.impcloud.net/RSP-Inventory-Suite/cloud-connector-service.git
+	branch = master
 [submodule "rfid-alert-service"]
 	path = rfid-alert-service
 	url = https://github.impcloud.net/RSP-Inventory-Suite/rfid-alert-service.git
+	branch = master
 [submodule "inventory-service"]
 	path = inventory-service
 	url = https://github.impcloud.net/RSP-Inventory-Suite/inventory-service.git
+	branch = master
 [submodule "telemetry-dashboard"]
 	path = telemetry-dashboard
 	url = https://github.impcloud.net/Responsive-Retail-Inventory/telemetry-dashboard.git
