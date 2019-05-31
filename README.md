@@ -41,6 +41,10 @@ If you are behind an enterprise proxy, add env variables to make build as:
 $ sudo GIT_TOKEN=your_impcloud_token http_proxy=proxy_url https_proxy=proxy_url make build
 ```
 
+## Run Grafana dashboard
+
+open browser at **http://127.0.0.1:8010**  admin/admin
+
 ## Stop services
 
 ```bash
