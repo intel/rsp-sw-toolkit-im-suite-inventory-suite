@@ -30,15 +30,19 @@ $ cd inventory-suite
 $ sudo GIT_TOKEN=your_impcloud_token make build
 ```
 
+If you are behind an enterprise proxy, add env variables to make build as:
+```bash
+$ sudo GIT_TOKEN=your_impcloud_token http_proxy=proxy_url https_proxy=proxy_url make build
+```
+
 **(if you have a fresh installation of Docker, initialize docker swarm)**
 ```bash
 $ sudo docker swarm init
-$ sudo make deploy
 ```
-If you are behind an enterprise proxy, add env variables to make build as:
+Using a text editor, insert your own eventDestination, alertDestination and heartbeatDestination urls in the docker-compose.yml
 
 ```bash
-$ sudo GIT_TOKEN=your_impcloud_token http_proxy=proxy_url https_proxy=proxy_url make build
+$ sudo make deploy
 ```
 
 ## Run Grafana dashboard
