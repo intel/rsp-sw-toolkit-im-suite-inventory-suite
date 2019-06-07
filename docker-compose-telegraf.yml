@@ -39,8 +39,6 @@ services:
   telegraf-application:
     image: telegraf:1.8    
     hostname: "${HOSTNAME}"
-    networks: 
-      - main-net
     networks:      
       main-net:
         aliases:

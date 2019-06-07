@@ -25,9 +25,6 @@ networks:
   main-net:
   internal-data-net:
   edgex-network:
-  mqtt-net:
-    external:
-      name: "Inventory-Suite_mqtt-net"
 
 services:  
   
@@ -44,7 +41,7 @@ services:
     image: rsp/inventory-service:dev
     user: "2000:2000"
     ports:
-      - "8080:8080"
+      - "8090:8080"
     networks:
       - edgex-network
       - internal-data-net
@@ -192,11 +189,12 @@ services:
     ports:
       - "49982:49982"
     networks:
-      - edgex-network      
-      - mqtt-net
+      - edgex-network
     depends_on:
       - edgex-core-data
       - edgex-core-command
+    extra_hosts:
+      - "mosquitto-server:172.17.0.1"
     volumes:
       - db-data:/data/db
       - log-data:/edgex/logs
