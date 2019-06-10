@@ -161,7 +161,7 @@ services:
       skipCertVerify: "true"
       port: "8080"
       serviceName: "Cloud Connector Service"
-      httpsProxyURL: "http://proxy-us.intel.com:912"
+      httpsProxyURL: ""
 
   product-data:
     image: rsp/product-data-service:dev
