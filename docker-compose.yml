@@ -183,6 +183,7 @@ services:
       port: "8080"
       serviceName: "Product Data Service"
       databaseName: "mapping?authSource=admin"
+      zeroMQ: "edgex-core-data:5563"
 
   mqtt-device-service:
     image: rsp/mqtt-device-service:dev
