@@ -1,0 +1,16 @@
+[Unit]
+Description=RSP Inventory Suite
+Requires=docker.service
+After=rsp-sw-toolkit-gw.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+StandardError=null
+StandardOutput=null
+WorkingDirectory=/opt/inventory-suite
+ExecStart=/bin/sh -c "make deploy 2>&1 | tee -a /var/log/rsp-inventory-suite.log /dev/tty2 &"
+ExecStop=/bin/sh -c "make stop"
+
+[Install]
+WantedBy=multi-user.target
