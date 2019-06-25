@@ -15,7 +15,7 @@
  # Unless otherwise agreed by Intel in writing, you may not remove or alter this notice or any other
  # notice embedded in Materials by Intel or Intel's suppliers or licensors in any way.
 
-.PHONY: build deploy stop grafana
+.PHONY: build deploy stop grafana init
 
 MICROSERVICES=inventory-service cloud-connector-service rfid-alert-service product-data-service inventory-probabilistic-algo mqtt-device-service
 .PHONY: $(MICROSERVICES)
@@ -84,17 +84,18 @@ mqtt-device-service:
 		-t rsp/mqtt-device-service:$(GIT_SHA) -t rsp/mqtt-device-service:dev \
 		./mqtt-device-service
 		
-deploy: grafana
+deploy: init grafana
 	docker stack deploy \
 		--with-registry-auth \
 		--compose-file docker-compose.yml \
 		--compose-file docker-compose-delhi-0.7.1.yml \
 		--compose-file docker-compose-telegraf.yml \
 		Inventory-Suite-Dev
+init: 
+	docker swarm init || true
 
 grafana:
 	cd telemetry-dashboard && ./start.sh
 
-stop:
+stop:	
 	docker stack rm Inventory-Suite-Dev RRP-Telemetry
-	
