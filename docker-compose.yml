@@ -208,3 +208,8 @@ services:
       - internal-data-net
     volumes:
       - "intel-plugin:/app"  
+
+  edgex-demo-ui:
+    image: rsp/edgex-demo-ui:dev
+    ports:
+      - "4200:4200"

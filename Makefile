@@ -17,7 +17,7 @@
 
 .PHONY: build deploy stop grafana init
 
-MICROSERVICES=inventory-service cloud-connector-service rfid-alert-service product-data-service inventory-probabilistic-algo mqtt-device-service
+MICROSERVICES=inventory-service cloud-connector-service rfid-alert-service product-data-service inventory-probabilistic-algo mqtt-device-service edgex-demo-ui
 .PHONY: $(MICROSERVICES)
 
 GIT_SHA=$(shell git rev-parse HEAD)
@@ -73,6 +73,15 @@ inventory-probabilistic-algo:
 		--label "git_sha=$(GIT_SHA)" \
 		-t rsp/inventory-probabilistic-algo:$(GIT_SHA) -t rsp/inventory-probabilistic-algo:dev \
 		./inventory-probabilistic-algo
+
+edgex-demo-ui:
+	docker build \
+		--build-arg http_proxy=$(http_proxy) \
+		--build-arg https_proxy=$(https_proxy) \
+		-f edgex-demo-ui/Dockerfile \
+		--label "git_sha=$(GIT_SHA)" \
+		-t rsp/edgex-demo-ui:$(GIT_SHA) -t rsp/edgex-demo-ui:dev \
+		./edgex-demo-ui
 
 mqtt-device-service:
 	docker build \
