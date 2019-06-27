@@ -25,72 +25,72 @@ GIT_SHA=$(shell git rev-parse HEAD)
 build: $(MICROSERVICES)
 
 inventory-service:
-	docker build \
+	docker build --rm \
 		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
 		--build-arg http_proxy=$(http_proxy) \
 		--build-arg https_proxy=$(https_proxy) \
 		-f inventory-service/Dockerfile_dev \
 		--label "git_sha=$(GIT_SHA)" \
-		 -t rsp/inventory-service:$(GIT_SHA) -t rsp/inventory-service:dev \
+		 -t rsp/inventory-service:dev \
 		 ./inventory-service
 
 cloud-connector-service:
-	docker build \
+	docker build --rm \
 		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
 		--build-arg http_proxy=$(http_proxy) \
 		--build-arg https_proxy=$(https_proxy) \
 		-f cloud-connector-service/Dockerfile_dev \
 		--label "git_sha=$(GIT_SHA)" \
-		 -t rsp/cloud-connector-service:$(GIT_SHA) -t rsp/cloud-connector-service:dev \
+		 -t rsp/cloud-connector-service:dev \
 		 ./cloud-connector-service
 
 rfid-alert-service:
-	docker build \
+	docker build --rm \
 		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
 		--build-arg http_proxy=$(http_proxy) \
 		--build-arg https_proxy=$(https_proxy) \
 		-f rfid-alert-service/Dockerfile_dev \
 		--label "git_sha=$(GIT_SHA)" \
-		-t rsp/rfid-alert-service:$(GIT_SHA) -t rsp/rfid-alert-service:dev \
+		-t rsp/rfid-alert-service:dev \
 		./rfid-alert-service
 
 product-data-service:
-	docker build \
+	docker build --rm \
 		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
 		--build-arg http_proxy=$(http_proxy) \
 		--build-arg https_proxy=$(https_proxy) \
 		-f product-data-service/Dockerfile_dev \
 		--label "git_sha=$(GIT_SHA)" \
-		-t rsp/product-data-service:$(GIT_SHA) -t rsp/product-data-service:dev \
+		-t rsp/product-data-service:dev \
 		./product-data-service
 
 inventory-probabilistic-algo:
-	docker build \
+	docker build --rm \
 		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
 		--build-arg http_proxy=$(http_proxy) \
 		--build-arg https_proxy=$(https_proxy) \
 		-f inventory-probabilistic-algo/Dockerfile_dev \
 		--label "git_sha=$(GIT_SHA)" \
-		-t rsp/inventory-probabilistic-algo:$(GIT_SHA) -t rsp/inventory-probabilistic-algo:dev \
+		-t rsp/inventory-probabilistic-algo:dev \
 		./inventory-probabilistic-algo
 
 edgex-demo-ui:
-	docker build \
+	docker build --rm \
 		--build-arg http_proxy=$(http_proxy) \
 		--build-arg https_proxy=$(https_proxy) \
 		-f edgex-demo-ui/Dockerfile \
 		--label "git_sha=$(GIT_SHA)" \
-		-t rsp/edgex-demo-ui:$(GIT_SHA) -t rsp/edgex-demo-ui:dev \
+	     -t rsp/edgex-demo-ui:dev \
 		./edgex-demo-ui
 
 mqtt-device-service:
-	docker build \
+	docker build --rm \
 		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
 		--build-arg http_proxy=$(http_proxy) \
 		--build-arg https_proxy=$(https_proxy) \
 		-f mqtt-device-service/Dockerfile_dev \
 		--label "git_sha=$(GIT_SHA)" \
-		-t rsp/mqtt-device-service:$(GIT_SHA) -t rsp/mqtt-device-service:dev \
+		-t rsp/mqtt-device-service:dev \
 		./mqtt-device-service
 		
 deploy: init grafana
