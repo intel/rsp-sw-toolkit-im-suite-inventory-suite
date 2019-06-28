@@ -6,8 +6,6 @@ Installer for Inventory Suite and EdgeX services
 
 [Docker engine](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 
-Mqtt-Moquitto broker from RFID-Controller must be running. This creates **Inventory-Suite_mqtt-net** docker network
-
 ## Clone repo and submodules
 
 To avoid git requesting authentication, run the following commands:
