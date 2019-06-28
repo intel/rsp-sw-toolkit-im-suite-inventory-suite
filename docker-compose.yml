@@ -79,7 +79,7 @@ services:
       newerHandheldHavePriority: "true"
       cloudConnectorApiGatewayEndpoint: "/callwebhook"
       rfidAlertMessageEndpoint: "/rfid-alert/alertmessage"
-      eventDestination: "https://5w1qbo67lh.execute-api.us-west-2.amazonaws.com/dev/events"
+      eventDestination: "https://f6wtzvncad.execute-api.us-west-2.amazonaws.com/dev/events"
       eventDestinationAuthEndpoint: ""
       eventDestinationAuthType: ""
       eventDestinationClientID: ""
@@ -158,7 +158,7 @@ services:
       skipCertVerify: "true"
       port: "8080"
       serviceName: "Cloud Connector Service"
-      httpsProxyURL: ""
+      httpsProxyURL: "http://proxy-chain.intel.com:912"
 
   product-data:
     image: rsp/product-data-service:dev
