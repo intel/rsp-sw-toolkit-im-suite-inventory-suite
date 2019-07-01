@@ -33,3 +33,4 @@
 [submodule "data-provider-service"]
 	path = data-provider-service
 	url = https://github.impcloud.net/RSP-Inventory-Suite/data-provider-service.git
+	branch = master
