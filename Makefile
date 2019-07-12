@@ -18,11 +18,12 @@
 .PHONY: build deploy stop grafana init
 
 MICROSERVICES=inventory-service cloud-connector-service rfid-alert-service product-data-service inventory-probabilistic-algo mqtt-device-service
-.PHONY: $(MICROSERVICES) edgex-demo-ui
+BUILDABLE=$(MICROSERVICES) edgex-demo-ui
+.PHONY: $(BUILDABLE)
 
 GIT_SHA=$(shell git rev-parse HEAD)
 
-build: $(MICROSERVICES) 
+build: $(BUILDABLE)
 
 $(MICROSERVICES):
 	docker build --rm \
@@ -35,10 +36,11 @@ $(MICROSERVICES):
 		 ./$@
 
 edgex-demo-ui:
+	# uses a different Dockerfile name and lacks GIT_TOKEN
 	docker build --rm \
 		--build-arg http_proxy=$(http_proxy) \
 		--build-arg https_proxy=$(https_proxy) \
-		-f $@/Dockerfile_dev \
+		-f $@/Dockerfile \
 		--label "git_sha=$(GIT_SHA)" \
 		 -t rsp/$@:dev \
 		 ./$@
