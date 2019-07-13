@@ -17,89 +17,42 @@
 
 .PHONY: build deploy stop grafana init
 
-MICROSERVICES=inventory-service cloud-connector-service rfid-alert-service product-data-service inventory-probabilistic-algo mqtt-device-service edgex-demo-ui
-.PHONY: $(MICROSERVICES)
+MICROSERVICES=inventory-service cloud-connector-service rfid-alert-service product-data-service inventory-probabilistic-algo mqtt-device-service
+BUILDABLE=$(MICROSERVICES) edgex-demo-ui
+.PHONY: $(BUILDABLE)
 
 GIT_SHA=$(shell git rev-parse HEAD)
 
-build: $(MICROSERVICES)
+build: $(BUILDABLE)
 
-inventory-service:
+$(MICROSERVICES):
 	docker build --rm \
 		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
 		--build-arg http_proxy=$(http_proxy) \
 		--build-arg https_proxy=$(https_proxy) \
-		-f inventory-service/Dockerfile_dev \
+		-f $@/Dockerfile_dev \
 		--label "git_sha=$(GIT_SHA)" \
-		 -t rsp/inventory-service:dev \
-		 ./inventory-service
-
-cloud-connector-service:
-	docker build --rm \
-		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
-		--build-arg http_proxy=$(http_proxy) \
-		--build-arg https_proxy=$(https_proxy) \
-		-f cloud-connector-service/Dockerfile_dev \
-		--label "git_sha=$(GIT_SHA)" \
-		 -t rsp/cloud-connector-service:dev \
-		 ./cloud-connector-service
-
-rfid-alert-service:
-	docker build --rm \
-		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
-		--build-arg http_proxy=$(http_proxy) \
-		--build-arg https_proxy=$(https_proxy) \
-		-f rfid-alert-service/Dockerfile_dev \
-		--label "git_sha=$(GIT_SHA)" \
-		-t rsp/rfid-alert-service:dev \
-		./rfid-alert-service
-
-product-data-service:
-	docker build --rm \
-		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
-		--build-arg http_proxy=$(http_proxy) \
-		--build-arg https_proxy=$(https_proxy) \
-		-f product-data-service/Dockerfile_dev \
-		--label "git_sha=$(GIT_SHA)" \
-		-t rsp/product-data-service:dev \
-		./product-data-service
-
-inventory-probabilistic-algo:
-	docker build --rm \
-		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
-		--build-arg http_proxy=$(http_proxy) \
-		--build-arg https_proxy=$(https_proxy) \
-		-f inventory-probabilistic-algo/Dockerfile_dev \
-		--label "git_sha=$(GIT_SHA)" \
-		-t rsp/inventory-probabilistic-algo:dev \
-		./inventory-probabilistic-algo
+		 -t rsp/$@:dev \
+		 ./$@
 
 edgex-demo-ui:
+	# uses a different Dockerfile name and lacks GIT_TOKEN
 	docker build --rm \
 		--build-arg http_proxy=$(http_proxy) \
 		--build-arg https_proxy=$(https_proxy) \
-		-f edgex-demo-ui/Dockerfile \
+		-f $@/Dockerfile \
 		--label "git_sha=$(GIT_SHA)" \
-	     -t rsp/edgex-demo-ui:dev \
-		./edgex-demo-ui
-
-mqtt-device-service:
-	docker build --rm \
-		--build-arg GIT_TOKEN=$(GIT_TOKEN) \
-		--build-arg http_proxy=$(http_proxy) \
-		--build-arg https_proxy=$(https_proxy) \
-		-f mqtt-device-service/Dockerfile_dev \
-		--label "git_sha=$(GIT_SHA)" \
-		-t rsp/mqtt-device-service:dev \
-		./mqtt-device-service
+		 -t rsp/$@:dev \
+		 ./$@
 		
 deploy: init grafana
 	docker stack deploy \
 		--with-registry-auth \
 		--compose-file docker-compose.yml \
-		--compose-file docker-compose-delhi-0.7.1.yml \
+		--compose-file docker-compose-edinburgh-1.0.0.yml \
 		--compose-file docker-compose-telegraf.yml \
 		Inventory-Suite-Dev
+
 init: 
 	docker swarm init || true
 
@@ -108,3 +61,4 @@ grafana:
 
 stop:	
 	docker stack rm Inventory-Suite-Dev RRP-Telemetry
+
