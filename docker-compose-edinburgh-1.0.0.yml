@@ -153,4 +153,23 @@ services:
       - consul-data:/consul/data
     depends_on:
       - metadata
+      
+  device-virtual:
+    image: edgexfoundry/docker-device-virtual-go:1.0.0
+    ports:
+    - "49990:49990"
+    container_name: edgex-device-virtual
+    hostname: edgex-device-virtual
+    networks:
+      edgex-network:
+        aliases:
+        - edgex-device-virtual
+    volumes:
+    - db-data:/data/db
+    - log-data:/edgex/logs
+    - consul-config:/consul/config
+    - consul-data:/consul/data
+    depends_on:
+    - data
+    - command
  
