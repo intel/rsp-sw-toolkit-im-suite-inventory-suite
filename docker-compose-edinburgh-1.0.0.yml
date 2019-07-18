@@ -78,7 +78,9 @@ services:
     container_name: edgex-mongo
     hostname: edgex-mongo
     networks:
-      - edgex-network
+      edgex-network:
+        aliases:
+          - edgex-mongo
     volumes:
       - db-data:/data/db
       - log-data:/edgex/logs
@@ -94,7 +96,9 @@ services:
     container_name: edgex-support-logging
     hostname: edgex-support-logging
     networks:
-      - edgex-network
+      edgex-network:
+        aliases:
+          - edgex-support-logging
     volumes:
       - db-data:/data/db
       - log-data:/edgex/logs
@@ -112,7 +116,9 @@ services:
     container_name: edgex-core-metadata
     hostname: edgex-core-metadata
     networks:
-      - edgex-network
+      edgex-network:
+        aliases:
+          - edgex-core-metadata
     volumes:
       - db-data:/data/db
       - log-data:/edgex/logs
@@ -129,7 +135,9 @@ services:
     container_name: edgex-core-data
     hostname: edgex-core-data
     networks:
-      - edgex-network
+      edgex-network:
+        aliases:
+          - edgex-core-data
     volumes:
       - db-data:/data/db
       - log-data:/edgex/logs
@@ -145,7 +153,9 @@ services:
     container_name: edgex-core-command
     hostname: edgex-core-command
     networks:
-      - edgex-network
+      edgex-network:
+        aliases:
+          - edgex-core-command
     volumes:
       - db-data:/data/db
       - log-data:/edgex/logs
@@ -153,23 +163,3 @@ services:
       - consul-data:/consul/data
     depends_on:
       - metadata
-      
-  device-virtual:
-    image: edgexfoundry/docker-device-virtual-go:1.0.0
-    ports:
-    - "49990:49990"
-    container_name: edgex-device-virtual
-    hostname: edgex-device-virtual
-    networks:
-      edgex-network:
-        aliases:
-        - edgex-device-virtual
-    volumes:
-    - db-data:/data/db
-    - log-data:/edgex/logs
-    - consul-config:/consul/config
-    - consul-data:/consul/data
-    depends_on:
-    - data
-    - command
- 
