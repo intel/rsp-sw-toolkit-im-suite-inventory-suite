@@ -46,6 +46,11 @@ services:
       - edgex-network
       - internal-data-net
       - main-net
+    healthcheck:
+      test: curl --fail -s http://localhost:8080/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
     logging:
       options: {max-file: '5', max-size: 1000m}
     environment:
@@ -110,6 +115,11 @@ services:
     networks:
       - main-net
       - edgex-network
+    healthcheck:
+      test: curl --fail -s http://localhost:8080/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
     logging:
       options: {max-file: '5', max-size: 1000m}
     environment:      
@@ -168,6 +178,11 @@ services:
     networks:
       - internal-data-net
       - main-net
+    healthcheck:
+      test: curl --fail -s http://localhost:8080/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
     logging:
       options: {max-file: '5', max-size: 1000m}
     environment:
