@@ -49,7 +49,7 @@ deploy: init grafana
 	docker stack deploy \
 		--with-registry-auth \
 		--compose-file docker-compose.yml \
-		--compose-file docker-compose-edinburgh-1.0.0.yml \
+		--compose-file docker-compose-edinburgh-1.0.1.yml \
 		--compose-file docker-compose-telegraf.yml \
 		Inventory-Suite-Dev
 
