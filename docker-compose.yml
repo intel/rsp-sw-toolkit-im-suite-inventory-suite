@@ -55,7 +55,7 @@ services:
       options: {max-file: '5', max-size: 1000m}
     environment:
       connectionString: "mongodb://mongo-inventory:27017"
-      loggingLevel: "debug"
+      loggingLevel: "info"
       epcFilters: "[]"
       telemetryEndpoint: "http://telemetry:8086"
       telemetryDataStoreName: "BadgerBay"
@@ -120,7 +120,7 @@ services:
     logging:
       options: {max-file: '5', max-size: 1000m}
     environment:      
-      loggingLevel: "debug"
+      loggingLevel: "info"
       telemetryEndpoint: "http://telemetry:8086"
       telemetryDataStoreName: "BadgerBay"
       responseLimit: 10000
@@ -157,7 +157,7 @@ services:
         max-size: "1000m"
         max-file: "5"
     environment:
-      loggingLevel: "debug"
+      loggingLevel: "info"
       telemetryEndpoint: "http://telemetry:8086"
       telemetryDataStoreName: "BadgerBay"
       responseLimit: 10000
@@ -185,7 +185,7 @@ services:
     environment:      
       connectionString: "mongodb://mongo-inventory:27017"
       contextSdk: ""
-      loggingLevel: "debug"
+      loggingLevel: "info"
       telemetryEndpoint: "http://telemetry:8086"
       telemetryDataStoreName: "BadgerBay"
       responseLimit: 10000
