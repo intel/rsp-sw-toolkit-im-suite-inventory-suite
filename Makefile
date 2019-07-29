@@ -44,7 +44,7 @@ edgex-demo-ui:
 		--label "git_sha=$(GIT_SHA)" \
 		 -t rsp/$@:dev \
 		 ./$@
-		
+
 deploy: init grafana
 	docker stack deploy \
 		--with-registry-auth \
@@ -54,7 +54,7 @@ deploy: init grafana
 		Inventory-Suite-Dev
 
 init: 
-	docker swarm init || true
+	docker swarm init 2>/dev/null || true
 
 grafana:
 	cd telemetry-dashboard && ./start.sh
