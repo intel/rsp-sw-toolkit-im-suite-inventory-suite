@@ -26,10 +26,20 @@ networks:
   internal-data-net:
   edgex-network:
 
+secrets:
+  environment-variables:
+    file: ./secrets/configuration.json
+  product-data-schema:
+    file: ./secrets/schemas/ProdSchema.json
+   advance-shipping-notice-schema:
+    file: ./secrets/schemas/ASNSchema.json
+
 services:  
   
   mongo-inventory:
     image: mongo:3.4
+    ports:
+      - "27018:27017"
     networks:
       internal-data-net:
     logging:
@@ -55,7 +65,7 @@ services:
       options: {max-file: '5', max-size: 1000m}
     environment:
       connectionString: "mongodb://mongo-inventory:27017"
-      loggingLevel: "info"
+      loggingLevel: "debug"
       epcFilters: "[]"
       telemetryEndpoint: "http://telemetry:8086"
       telemetryDataStoreName: "BadgerBay"
@@ -209,6 +219,31 @@ services:
       - log-data:/edgex/logs
       - consul-config:/consul/config
 
+  data-provider:
+    image: rsp/data-provider-service:dev
+    networks:      
+      - edgex-network
+      - main-net
+    logging:
+      options:
+        max-size: "1000m"
+        max-file: "5"    
+    environment:
+      no_proxy: "cloud-connector,edgex-core-consul,edgex-core-data"     
+      NO_PROXY: "cloud-connector,edgex-core-consul,edgex-core-data"
+      serviceName : "Data Provider"
+      loggingLevel: "info"
+      telemetryEndpoint: "http://telemetry:8086"
+      telemetryDataStoreName: "BadgerBay"
+      port: "8080"
+      pipelinesDir: "/pipelines"
+      templatesDir: "/templates"      
+      secretsPath: "/run/secrets"
+    secrets:
+        - source: environment-variables
+          target: configuration.json
+    volumes:
+      - ./data-provider-pipelines/:/pipelines
   # Intel Probabilistic Inventory Algorithm
   inventory-probabilistic-algo:
     image: rsp/inventory-probabilistic-algo:dev
@@ -216,7 +251,6 @@ services:
       - internal-data-net
     volumes:
       - "intel-plugin:/app"  
-
   # edgex-demo-ui:
   #   image: rsp/edgex-demo-ui:dev
   #   ports:
