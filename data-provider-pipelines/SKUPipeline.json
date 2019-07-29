@@ -1,0 +1,25 @@
+{
+  "name": "SKU",
+  "description": "Download, validate, and store SKU Data.",
+  "timeoutSeconds": 60,
+  "trigger": {
+    "interval": {
+      "seconds": 120
+    }
+  },
+  "tasks": {
+    "doEdgeX": {
+      "type": "provideEdgeX",
+      "raw": {
+        "inputs": {
+          "deviceName": "SKU_Data_Device",
+          "dataType": "SKU_data",
+          "lastUpdatedKey": "sku.lastUpdated",
+          "dataSchemaName": "schemas/ProdSchema.json",
+          "dataEndpoint": "http://sku_data",
+          "siteID": "rrs-gateway"
+        }
+      }
+    }
+  }
+}
