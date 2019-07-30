@@ -13,11 +13,11 @@
       "raw": {
         "inputs": {
           "lastUpdatedKey": "asn.lastUpdated",
-          "dataEndpoint": "https://5w1qbo67lh.execute-api.us-west-2.amazonaws.com/dev/productitems",
+          "dataEndpoint": "https://f6wtzvncad.execute-api.us-west-2.amazonaws.com/dev/shippingnotices",
           "siteID": "rrs-gateway",
           "deviceName": "ASN_Data_Device",
           "dataType": "ASN_data",
-          "dataSchemaName": "schemas/ASNSchema.json"
+          "dataSchemaName": "ASNSchema.json"
         }
       }
     }

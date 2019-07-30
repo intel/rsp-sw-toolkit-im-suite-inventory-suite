@@ -31,8 +31,10 @@ secrets:
     file: ./secrets/configuration.json
   product-data-schema:
     file: ./secrets/schemas/ProdSchema.json
-   advance-shipping-notice-schema:
+  advance-shipping-notice-schema:
     file: ./secrets/schemas/ASNSchema.json
+  cluster-file-schema:
+    file: ./secrets/schemas/ClusterSchema.json
 
 services:  
   
@@ -185,6 +187,7 @@ services:
     networks:
       - internal-data-net
       - main-net
+      - edgex-network
     healthcheck:
       test: curl --fail -s http://localhost:8080/ || exit 1
       interval: 1m30s
@@ -232,7 +235,7 @@ services:
       no_proxy: "cloud-connector,edgex-core-consul,edgex-core-data"     
       NO_PROXY: "cloud-connector,edgex-core-consul,edgex-core-data"
       serviceName : "Data Provider"
-      loggingLevel: "info"
+      loggingLevel: "debug"
       telemetryEndpoint: "http://telemetry:8086"
       telemetryDataStoreName: "BadgerBay"
       port: "8080"
@@ -242,8 +245,14 @@ services:
     secrets:
         - source: environment-variables
           target: configuration.json
-    volumes:
-      - ./data-provider-pipelines/:/pipelines
+        - source: product-data-schema
+          target: /run/secrets/ProdSchema.json
+        - source: advance-shipping-notice-schema
+          target: /run/secrets/ASNSchema.json
+        - source: cluster-file-schema
+          target: /run/secrets/clusterSchema.json
+    volumes:      
+      - ./data-provider-pipelines/:/pipelines/
   # Intel Probabilistic Inventory Algorithm
   inventory-probabilistic-algo:
     image: rsp/inventory-probabilistic-algo:dev
