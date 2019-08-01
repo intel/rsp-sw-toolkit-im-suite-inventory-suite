@@ -1,0 +1,25 @@
+{
+  "name": "ASN",
+  "description": "Download, validate, and store ASN Data.",
+  "timeoutSeconds": 60,
+  "trigger": {
+    "interval": {
+      "minutes": 2
+    }
+  },
+  "tasks": {
+    "doEdgeX": {
+      "type": "provideEdgeX",
+      "raw": {
+        "inputs": {
+          "lastUpdatedKey": "asn.lastUpdated",
+          "dataEndpoint": "https://f6wtzvncad.execute-api.us-west-2.amazonaws.com/dev/shippingnotices",
+          "siteID": "rrs-gateway",
+          "deviceName": "ASN_Data_Device",
+          "dataType": "ASN_data",
+          "dataSchemaName": "ASNSchema.json"
+        }
+      }
+    }
+  }
+}

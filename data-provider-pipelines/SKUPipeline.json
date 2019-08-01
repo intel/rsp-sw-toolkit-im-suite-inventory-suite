@@ -1,0 +1,25 @@
+{
+  "name": "SKU",
+  "description": "Download, validate, and store SKU Data.",
+  "timeoutSeconds": 60,
+  "trigger": {
+    "interval": {
+      "seconds": 120
+    }
+  },
+  "tasks": {
+    "doEdgeX": {
+      "type": "provideEdgeX",
+      "raw": {
+        "inputs": {
+          "deviceName": "SKU_Data_Device",
+          "dataType": "SKU_data",
+          "lastUpdatedKey": "sku.lastUpdated",
+          "dataSchemaName": "ProdSchema.json",
+          "dataEndpoint": "https://f6wtzvncad.execute-api.us-west-2.amazonaws.com/dev/productitems",
+          "siteID": "rrs-gateway"
+        }
+      }
+    }
+  }
+}
