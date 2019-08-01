@@ -204,7 +204,7 @@ services:
       responseLimit: 10000
       port: "8080"
       serviceName: "Product Data Service"
-      databaseName: "mapping?authSource=admin"     
+      databaseName: "mapping?authSource=admin"
 
   mqtt-device-service:
     image: rsp/mqtt-device-service:dev
@@ -212,9 +212,6 @@ services:
       - "49982:49982"
     networks:
       - edgex-network
-    depends_on:
-      - edgex-core-data
-      - edgex-core-command
     extra_hosts:
       - "mosquitto-server:172.17.0.1"
     volumes:
@@ -253,13 +250,19 @@ services:
           target: /run/secrets/clusterSchema.json
     volumes:      
       - ./data-provider-pipelines/:/pipelines/
+  
   # Intel Probabilistic Inventory Algorithm
   inventory-probabilistic-algo:
     image: rsp/inventory-probabilistic-algo:dev
     networks:
       - internal-data-net
     volumes:
-      - "intel-plugin:/app"  
+      - "intel-plugin:/plugin"
+    # this only needs to be run once to self-configure. only restart if there was a failure.
+    deploy:
+      restart_policy:
+        condition: on-failure
+
   # edgex-demo-ui:
   #   image: rsp/edgex-demo-ui:dev
   #   ports:
