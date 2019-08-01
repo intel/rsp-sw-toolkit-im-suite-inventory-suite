@@ -45,7 +45,7 @@ services:
     networks:
       internal-data-net:
     logging:
-      options: {max-file: '5', max-size: 1000m}
+      options: {max-file: '5', max-size: 100m}
     volumes:
       - "inventory-data:/data/db"   
 
@@ -64,7 +64,7 @@ services:
       timeout: 10s
       retries: 3
     logging:
-      options: {max-file: '5', max-size: 1000m}
+      options: {max-file: '5', max-size: 100m}
     environment:
       connectionString: "mongodb://mongo-inventory:27017"
       loggingLevel: "debug"
@@ -130,7 +130,7 @@ services:
       timeout: 10s
       retries: 3
     logging:
-      options: {max-file: '5', max-size: 1000m}
+      options: {max-file: '5', max-size: 100m}
     environment:      
       loggingLevel: "info"
       telemetryEndpoint: "http://telemetry:8086"
@@ -166,7 +166,7 @@ services:
        - main-net
     logging:
       options:
-        max-size: "1000m"
+        max-size: "100m"
         max-file: "5"
     environment:
       loggingLevel: "info"
@@ -194,7 +194,7 @@ services:
       timeout: 10s
       retries: 3
     logging:
-      options: {max-file: '5', max-size: 1000m}
+      options: {max-file: '5', max-size: 100m}
     environment:      
       connectionString: "mongodb://mongo-inventory:27017"
       contextSdk: ""
@@ -226,7 +226,7 @@ services:
       - main-net
     logging:
       options:
-        max-size: "1000m"
+        max-size: "100m"
         max-file: "5"    
     environment:
       no_proxy: "cloud-connector,edgex-core-consul,edgex-core-data"     

@@ -9,7 +9,7 @@
 [submodule "mqtt-device-service"]
 	path = mqtt-device-service
 	url = https://github.impcloud.net/RSP-Inventory-Suite/mqtt-device-service.git
-	branch = edinburgh
+	branch = master
 [submodule "cloud-connector-service"]
 	path = cloud-connector-service
 	url = https://github.impcloud.net/RSP-Inventory-Suite/cloud-connector-service.git
