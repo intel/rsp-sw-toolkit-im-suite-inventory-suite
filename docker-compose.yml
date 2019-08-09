@@ -224,6 +224,8 @@ services:
     networks:      
       - edgex-network
       - main-net
+    extra_hosts:
+      - "mosquitto-server:172.17.0.1"
     logging:
       options:
         max-size: "100m"
