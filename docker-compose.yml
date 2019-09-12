@@ -73,7 +73,7 @@ services:
       telemetryDataStoreName: "BadgerBay"
       responseLimit: 10000      
       port: "8080"      
-      cloudConnectorUrl: ""
+      cloudConnectorUrl: "http://cloud-connector:8080"
       mappingSkuUrl: "http://product-data:8080/skus/"
       rfidAlertURL: "http://rfid-alert:8080"
       serviceName: "Inventory Service"
