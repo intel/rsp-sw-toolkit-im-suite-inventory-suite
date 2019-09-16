@@ -19,6 +19,7 @@ version: '3.4'
 
 volumes:
   inventory-data:
+  product-data:
   intel-plugin:
 
 networks:
@@ -48,6 +49,17 @@ services:
       options: {max-file: '5', max-size: 100m}
     volumes:
       - "inventory-data:/data/db"   
+
+  postgres-inventory:
+    image: postgres:9.6
+    ports:
+      - "5432:5432"
+    networks:
+      internal-data-net:
+    logging:
+      options: {max-file: '5', max-size: 100m}
+    volumes:
+      - "product-data:/var/lib/postgresql/data/"   
 
   inventory:    
     image: rsp/inventory-service:dev
@@ -195,16 +207,20 @@ services:
       retries: 3
     logging:
       options: {max-file: '5', max-size: 100m}
-    environment:      
-      connectionString: "mongodb://mongo-inventory:27017"
-      contextSdk: ""
+    environment:                
       loggingLevel: "info"
+      dbHost: "postgres-inventory"
+      dbUser: "postgres"
+      dbPass: ""
+      dbPort: "5432"
+      dbName: "postgres"
+      dbSslmode: "disable"
+      zeroMQ: "edgex-core-data:5563"
       telemetryEndpoint: "http://telemetry:8086"
       telemetryDataStoreName: "BadgerBay"
       responseLimit: 10000
       port: "8080"
-      serviceName: "Product Data Service"
-      databaseName: "mapping?authSource=admin"
+      serviceName: "Product Data Service"      
 
   mqtt-device-service:
     image: rsp/mqtt-device-service:dev
