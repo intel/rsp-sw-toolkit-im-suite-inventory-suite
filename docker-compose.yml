@@ -214,7 +214,7 @@ services:
       dbPass: ""
       dbPort: "5432"
       dbName: "postgres"
-      dbSslmode: "disable"
+      dbSSLmode: "disable"
       zeroMQ: "edgex-core-data:5563"
       telemetryEndpoint: "http://telemetry:8086"
       telemetryDataStoreName: "BadgerBay"
