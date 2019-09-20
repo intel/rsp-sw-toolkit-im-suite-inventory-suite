@@ -281,7 +281,7 @@ services:
       restart_policy:
         condition: on-failure
 
-  # edgex-demo-ui:
-  #   image: rsp/edgex-demo-ui:dev
-  #   ports:
-  #     - "4200:4200"
+  edgex-demo-ui:
+    image: rsp/edgex-demo-ui:dev
+    ports:
+      - "4200:4200"
