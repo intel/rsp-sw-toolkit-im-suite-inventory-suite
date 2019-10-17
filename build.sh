@@ -1,3 +1,5 @@
+ #!/bin/bash
+
  # INTEL CONFIDENTIAL
  # Copyright (2019) Intel Corporation.
  #
@@ -15,50 +17,22 @@
  # Unless otherwise agreed by Intel in writing, you may not remove or alter this notice or any other
  # notice embedded in Materials by Intel or Intel's suppliers or licensors in any way.
 
-.PHONY: build deploy stop grafana init 
-
-MICROSERVICES=inventory-service cloud-connector-service rfid-alert-service product-data-service inventory-probabilistic-algo mqtt-device-service data-provider-service
-BUILDABLE=$(MICROSERVICES) edgex-demo-ui
-.PHONY: $(BUILDABLE)
-
-GIT_SHA=$(shell git rev-parse HEAD)
-
-build: $(BUILDABLE)
-
-$(MICROSERVICES):
-	docker build --rm \
-		--build-arg GIT_TOKEN=${GIT_TOKEN} \
-		--build-arg http_proxy=${http_proxy} \
-		--build-arg https_proxy=${https_proxy} \
-		-f $@/Dockerfile_dev \
-		--label "git_sha=$(GIT_SHA)" \
-		 -t rsp/$@:dev \
-		 ./$@
-
-edgex-demo-ui:
-	# uses a different Dockerfile name and lacks GIT_TOKEN
-	docker build --rm \
-		--build-arg http_proxy=${http_proxy} \
-		--build-arg https_proxy=${https_proxy} \
-		-f $@/Dockerfile \
-		--label "git_sha=$(GIT_SHA)" \
-		 -t rsp/$@:dev \
-		 ./$@
-
-deploy: init grafana
-	docker stack deploy \
-		--with-registry-auth \
-		--compose-file docker-compose.yml \
-		--compose-file docker-compose-edinburgh-1.0.1.yml \
-		--compose-file docker-compose-telegraf.yml \
-		Inventory-Suite-Dev
-
-init: 
-	docker swarm init 2>/dev/null || true
-
-grafana:
-	cd telemetry-dashboard && ./start.sh
-
-stop:	
-	docker stack rm Inventory-Suite-Dev RRP-Telemetry
-
+echo
+echo "Installing the following dependencies..."
+echo "    1. docker"
+echo "    2. make"
+echo
+apt update
+apt -y install docker.io make
+echo
+echo "Building EdgeX and Intel Inventory Suite..."
+echo
+if make build 
+then   
+  if make deploy 
+  then 
+    echo "EdgeX and Inventory Suite successfully deployed!"  
+  fi
+  exit $?
+fi
+exit $?
