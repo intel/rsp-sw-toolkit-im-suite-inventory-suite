@@ -23,7 +23,7 @@ echo "    1. docker"
 echo "    2. make"
 echo
 apt update
-apt -y install docker.io make
+apt -y install docker.io build-essential
 echo
 echo "Building EdgeX and Intel Inventory Suite..."
 echo
