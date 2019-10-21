@@ -121,7 +121,7 @@ services:
       advancedShippingNoticeFacilityID: "UNDEFINED_FACILITY"
       rulesUrl: ""
       cloudConnectorRetrySeconds: 30
-      proprietaryTagFormat: "header.serialNumber.productID"
+      proprietaryTagProductIdx: 2
       proprietaryTagBitBoundary: "8.44.44"
       tagURIAuthorityName: "example.com"
       tagURIAuthorityDate: "2019-01-01"
