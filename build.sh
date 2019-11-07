@@ -50,9 +50,16 @@ echo
 if make build 
 then   
   if make deploy 
-  then 
+  then     
+    echo
+    echo "Applying indexes to EdgeX's reading collection..."
+    echo
+    sleep 5
+    docker exec -it $(docker ps | awk '{print $NF}' | grep -w Inventory-Suite-Dev_mongo.1) mongo localhost/coredata --eval "db.reading.createIndex({uuid:1})"
+    echo
     echo "EdgeX and Inventory Suite successfully deployed!"  
   fi
   exit $?
 fi
 exit $?
+
