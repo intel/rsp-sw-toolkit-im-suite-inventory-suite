@@ -2,10 +2,6 @@
 	path = product-data-service
 	url = https://github.impcloud.net/RSP-Inventory-Suite/product-data-service.git
 	branch = master
-[submodule "inventory-probabilistic-algo"]
-	path = inventory-probabilistic-algo
-	url = https://github.impcloud.net/RSP-Inventory-Suite/inventory-probabilistic-algo.git
-	branch = master
 [submodule "mqtt-device-service"]
 	path = mqtt-device-service
 	url = https://github.impcloud.net/RSP-Inventory-Suite/mqtt-device-service.git

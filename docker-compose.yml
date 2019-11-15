@@ -19,8 +19,7 @@ version: '3.4'
 
 volumes:
   inventory-data:
-  product-data:
-  intel-plugin:
+  product-data:  
 
 networks:
   main-net:
@@ -129,9 +128,7 @@ services:
       dailyTurnHistoryMaximum: 25
       dailyTurnComputeUsingMedian: "false"
       useComputedDailyTurnInConfidence: "true"
-      probPlugin: "true"
-    volumes:
-      - "intel-plugin:/plugin"
+      probPlugin: "false"    
 
   rfid-alert:
     image: rsp/rfid-alert-service:dev
@@ -270,19 +267,7 @@ services:
         - source: cluster-file-schema
           target: /run/secrets/clusterSchema.json
     volumes:      
-      - ./data-provider-pipelines/:/pipelines/
-  
-  # Intel Probabilistic Inventory Algorithm
-  inventory-probabilistic-algo:
-    image: rsp/inventory-probabilistic-algo:dev
-    networks:
-      - internal-data-net
-    volumes:
-      - "intel-plugin:/plugin"
-    # this only needs to be run once to self-configure. only restart if there was a failure.
-    deploy:
-      restart_policy:
-        condition: on-failure
+      - ./data-provider-pipelines/:/pipelines/ 
 
   edgex-demo-ui:
     image: rsp/edgex-demo-ui:dev
