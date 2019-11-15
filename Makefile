@@ -45,7 +45,7 @@ edgex-demo-ui:
 		 -t rsp/$@:dev \
 		 ./$@
 
-deploy: init grafana
+deploy: init
 	docker stack deploy \
 		--with-registry-auth \
 		--compose-file docker-compose.yml \
@@ -55,9 +55,6 @@ deploy: init grafana
 
 init: 
 	docker swarm init 2>/dev/null || true
-
-grafana:
-	cd telemetry-dashboard && ./start.sh
 
 stop:	
 	docker stack rm Inventory-Suite-Dev RRP-Telemetry
