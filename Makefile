@@ -17,7 +17,7 @@
 
 .PHONY: build deploy stop grafana init 
 
-MICROSERVICES=inventory-service cloud-connector-service rfid-alert-service product-data-service inventory-probabilistic-algo mqtt-device-service data-provider-service
+MICROSERVICES=inventory-service cloud-connector-service rfid-alert-service product-data-service mqtt-device-service data-provider-service
 BUILDABLE=$(MICROSERVICES) edgex-demo-ui
 .PHONY: $(BUILDABLE)
 
