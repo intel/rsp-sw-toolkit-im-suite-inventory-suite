@@ -57,5 +57,5 @@ init:
 	docker swarm init 2>/dev/null || true
 
 stop:	
-	docker stack rm Inventory-Suite-Dev RRP-Telemetry
+	docker stack rm Inventory-Suite-Dev
 
