@@ -44,7 +44,7 @@ else
     exit 1
 fi
 echo
-echo "Building EdgeX and Intel Inventory Suite..."
+echo "Building and Deploying Intel Inventory Suite and EdgeX..."
 echo
 
 if make build 
