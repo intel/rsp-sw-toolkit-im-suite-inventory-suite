@@ -51,11 +51,7 @@ deploy: init
 		--compose-file docker-compose.yml \
 		--compose-file docker-compose-edinburgh-1.0.1.yml \
 		--compose-file docker-compose-telegraf.yml \
-		--compose-file myconfs/compose-override-edinburgh.yml \
 		Inventory-Suite-Dev
-
-food-safety-demo:
-
 
 init: 
 	docker swarm init 2>/dev/null || true
