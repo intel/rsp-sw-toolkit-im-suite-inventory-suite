@@ -152,6 +152,9 @@ services:
       maxMissedHeartbeats: 3
       notificationChanSize: 100
       batchSizeMax: 50
+    secrets:
+      - source: environment-variables
+        target: configuration.json
 
   cloud-connector:
     image: rsp/cloud-connector-service:dev
@@ -245,8 +248,8 @@ services:
           target: /run/secrets/ASNSchema.json
         - source: cluster-file-schema
           target: /run/secrets/clusterSchema.json
-    volumes:      
-      - ./data-provider-pipelines/:/pipelines/ 
+   volumes:      
+    - ./data-provider-pipelines/:/pipelines/ 
 
   edgex-demo-ui:
     image: rsp/edgex-demo-ui:dev
