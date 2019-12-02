@@ -26,7 +26,7 @@ Using a text editor, insert your own eventDestination, alertDestination and hear
 
 ```bash
 $ cd inventory-suite
-$ sudo -E ./build.sh
+$ ./build.sh
 ```
 
 ## Run Grafana dashboard

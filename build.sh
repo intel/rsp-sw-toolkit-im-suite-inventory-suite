@@ -22,14 +22,14 @@ echo "Installing the following dependencies..."
 echo "    1. make"
 echo "    2. curl"
 echo
-apt update
-apt -y install build-essential curl
+sudo apt update
+sudo apt -y install build-essential curl
 
 echo
 echo "Checking docker and Intel RSP..."
 echo
 {
-  docker ps -q > /dev/null
+  sudo docker ps -q > /dev/null
 } || {
   echo "Docker is not running. Please make sure Docker is installed."  
   exit 1
@@ -47,17 +47,30 @@ echo
 echo "Building and Deploying Intel Inventory Suite and EdgeX..."
 echo
 
-if make build 
+if sudo -E make build 
 then   
-  if make deploy 
+  if sudo make deploy 
   then     
+    echo    
     echo
-    echo "Applying indexes to EdgeX's reading collection..."
-    echo
-    sleep 10
-    docker exec -it $(docker ps | awk '{print $NF}' | grep -w Inventory-Suite-Dev_mongo.1) mongo localhost/coredata --eval "db.reading.createIndex({uuid:1})"
-    echo
-    echo "EdgeX and Inventory Suite successfully deployed!"  
+    echo "Applying index to EdgeX's reading collection..."
+    sleep 5    
+    RETRY=5
+    i=0
+    while [ $i -lt $RETRY ]; do        
+        sudo docker exec -it $(docker ps | awk '{print $NF}' | grep -w Inventory-Suite-Dev_mongo.1) mongo localhost/coredata --eval "db.reading.createIndex({uuid:1})" && echo $?
+        [[ $? -eq 0 ]] && break
+        echo "Retries...${i}"        
+        sleep 5
+        i=$((i + 1))
+    done
+    if [[ $RETRY -eq i ]]
+    then
+      echo "Not able to apply index to EdgeX Mongo. Exiting..."
+    else
+     echo "EdgeX and Inventory Suite successfully deployed!"
+    fi
+    exit 1
   fi
   exit $?
 fi
