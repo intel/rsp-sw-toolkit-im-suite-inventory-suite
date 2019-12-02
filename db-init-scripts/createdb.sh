@@ -4,11 +4,9 @@
 set -e
 set -u
 
-function createDataBases() {
-	local dbName=$1	
-    local dbUser=$POSTGRES_USER
-	psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
-	    CREATE DATABASE $dbName OWNER $dbUser;	    
+function createDataBases() {	
+	psql --set db="$1" --set user="$POSTGRES_USER" -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
+	    CREATE DATABASE :"db" OWNER :"user";	    
 EOSQL
 }
 

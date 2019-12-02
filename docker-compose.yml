@@ -18,8 +18,7 @@
 version: '3.4'
 
 volumes:
-  inventory-data:
-  product-data:  
+  inventory-suite-data:  
 
 networks:
   main-net:
@@ -38,19 +37,8 @@ secrets:
 
 services:  
   
-  mongo-inventory:
-    image: mongo:3.4
-    ports:
-      - "27018:27017"
-    networks:
-      internal-data-net:
-    logging:
-      options: {max-file: '5', max-size: 100m}
-    volumes:
-      - "inventory-data:/data/db"   
-
   postgres-inventory:
-    image: postgres:9.6
+    image: postgres:11-alpine
     environment:
       - POSTGRES_MULTIPLE_DATABASES=inventory,product
     ports:
@@ -60,7 +48,7 @@ services:
     logging:
       options: {max-file: '5', max-size: 100m}
     volumes:
-      - "product-data:/var/lib/postgresql/data/"   
+      - "inventory-suite-data:/var/lib/postgresql/data/"   
       - ./db-init-scripts:/docker-entrypoint-initdb.d
 
   inventory:    
