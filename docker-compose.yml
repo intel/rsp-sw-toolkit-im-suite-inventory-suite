@@ -18,8 +18,7 @@
 version: '3.4'
 
 volumes:
-  inventory-data:
-  product-data:  
+  inventory-suite-data:
 
 networks:
   main-net:
@@ -43,14 +42,15 @@ secrets:
     file: ./secrets/db-setup.sh
 
 services:  
+
   postgres-inventory:
-    image: postgres:12.1
+    image: postgres:11-apline
     networks:
       internal-data-net:
     logging:
       options: {max-file: '5', max-size: 100m}
     volumes:
-      - "product-data:/var/lib/postgresql/data/"   
+      - "product-data:/var/lib/postgresql/data/"
     environment:
       POSTGRES_USER_FILE: /run/secrets/postgres-user
       POSTGRES_PASSWORD_FILE: /run/secrets/postgres-pass
@@ -58,15 +58,15 @@ services:
       # encryption is handled by the overlay network;
       # if the service is meant to be exposed externally,
       # then SSLMode should be set to a higher level
-      DBSSLMODE: disable 
+      DBSSLMODE: disable
     secrets:
       - source: db-user
-        target: postgres-user 
+        target: postgres-user
       - source: db-pass
         target: postgres-pass
       - source: db-setup
-        target: /docker-entrypoint-initdb.d/db-setup.sh
-        uid: '999' # postgres UID in this container 
+        target: /docker-entrypoint-initdb.d/createdb.sh
+        uid: '999' # postgres UID in this container
         mode: 0700
 
   inventory:    
@@ -86,58 +86,52 @@ services:
     logging:
       options: {max-file: '5', max-size: 100m}
     environment:
-      serviceName: "Inventory Service"
-      port: "8080"
-      loggingLevel: "debug"
-
       dbHost: "postgres-inventory"
-      dbPort: 5432
+      dbPort: "5432"
       dbName: "inventory"
       dbSSLMode: "disable"
-
-      telemetryDataStoreName: "BadgerBay"
+      loggingLevel: "debug"
+      epcFilters: "[]"
       telemetryEndpoint: "http://telemetry:8086"
+      telemetryDataStoreName: "BadgerBay"
+      responseLimit: 10000      
+      port: "8080"      
       cloudConnectorUrl: "http://cloud-connector:8080"
       mappingSkuUrl: "http://product-data:8080/skus/"
       rfidAlertURL: "http://rfid-alert:8080"
-      rulesUrl: ""
-
-      triggerRulesEndpoint: "/triggerrules"
-      cloudConnectorApiGatewayEndpoint: "/callwebhook"
-      rfidAlertMessageEndpoint: "/rfid-alert/alertmessage"
-
-      epcFilters: "[]"
+      serviceName: "Inventory Service"
       ageOuts: "front:10,back:60"
-
       dailyInventoryPercentage: "0.01"
       probUnreadToRead: "0.20"
       probInStoreRead: "0.75"
       probExitError: "0.10"
       purgingDays: "90"
-
-      responseLimit: 10000
       serverReadTimeOutSeconds: 900
       serverWriteTimeOutSeconds: 900
-      endpointConnectionTimedOutSeconds: 15
-      cloudConnectorRetrySeconds: 30
-
       contextEventFilterProviderID: ""
-
+      triggerRulesEndpoint: "/triggerrules"
       triggerRulesOnFixedTags: "true"
       newerHandheldHavePriority: "true"
-      dailyTurnComputeUsingMedian: "false"
-      useComputedDailyTurnInConfidence: "true"
-      probPlugin: "false"
-
-      dailyTurnMinimumDataPoints: 2
-      dailyTurnHistoryMaximum: 25
+      cloudConnectorApiGatewayEndpoint: "/callwebhook"
+      rfidAlertMessageEndpoint: "/rfid-alert/alertmessage"
+      eventDestination: "https://f6wtzvncad.execute-api.us-west-2.amazonaws.com/dev/events"
+      eventDestinationAuthEndpoint: ""
+      eventDestinationAuthType: ""
+      eventDestinationClientID: ""
+      eventDestinationClientSecret: ""
       dailyInventoryPercentageLabel: "daily_turn"
       probUnreadToReadLabel: "becoming_readable"
       probInStoreReadLabel: "being_read"
       probExitErrorLabel: "exit_error"
-
+      endpointConnectionTimedOutSeconds: 15
       advancedShippingNoticeFacilityID: "UNDEFINED_FACILITY"
-
+      rulesUrl: ""
+      cloudConnectorRetrySeconds: 30
+      dailyTurnMinimumDataPoints: 2
+      dailyTurnHistoryMaximum: 25
+      dailyTurnComputeUsingMedian: "false"
+      useComputedDailyTurnInConfidence: "true"
+      probPlugin: "false"
     secrets:
       - source: environment-variables
         target: configuration.json
@@ -155,29 +149,26 @@ services:
       retries: 3
     logging:
       options: {max-file: '5', max-size: 100m}
-    environment:
-      serviceName: "RFID Alert service"
-      port: "8080"
+    environment:      
       loggingLevel: "info"
-
-      telemetryDataStoreName: "BadgerBay"
       telemetryEndpoint: "http://telemetry:8086"
-      cloudConnectorURL: "http://cloud-connector:8080"
-      mappingSkuURL : "http://product-data:8080"
-      zeroMQ: "edgex-core-data:5563"
-
-      cloudConnectorEndpoint: "/callwebhook"
-      mappingSkuEndpoint: "/skus"
-
+      telemetryDataStoreName: "BadgerBay"
+      responseLimit: 10000
       secureMode: "true"
       skipCertVerify: "true"
-      sendNotWhitelistedAlert: "false"
-
-      responseLimit: 10000
+      port: "8080"
+      zeroMQ: "edgex-core-data:5563"
+      cloudConnectorURL: "http://cloud-connector:8080"
+      mappingSkuURL : "http://product-data:8080"
       watchdogSeconds: 120
+      serviceName: "RFID Alert service"
       maxMissedHeartbeats: 3
       notificationChanSize: 100
+      cloudConnectorEndpoint: "/callwebhook"
+      heartbeatEndpoint: "/heartbeat"
+      mappingSkuEndpoint: "/skus"
       batchSizeMax: 50
+      sendNotWhitelistedAlert: "false"
     secrets:
       - source: environment-variables
         target: configuration.json
@@ -192,15 +183,15 @@ services:
         max-size: "100m"
         max-file: "5"
     environment:
-      serviceName: "Cloud Connector Service"
-      port: "8080"
       loggingLevel: "info"
-      telemetryDataStoreName: "BadgerBay"
       telemetryEndpoint: "http://telemetry:8086"
-      httpsProxyURL: ""
+      telemetryDataStoreName: "BadgerBay"
+      responseLimit: 10000
       secureMode: "true"
       skipCertVerify: "true"
-      responseLimit: 10000
+      port: "8080"
+      serviceName: "Cloud Connector Service"
+      httpsProxyURL: ""
 
   product-data:
     image: rsp/product-data-service:dev
@@ -218,18 +209,18 @@ services:
       retries: 3
     logging:
       options: {max-file: '5', max-size: 100m}
-    environment:
-      serviceName: "Product Data Service"
-      port: "8080"
+    environment:                
       loggingLevel: "info"
-      dbHost: "http://postgres-inventory"
-      dbPort: 5432
+      dbHost: "postgres-inventory"
+      dbPort: "5432"
       dbName: "product"
       dbSSLMode: "disable"
-      telemetryDataStoreName: "BadgerBay"
-      telemetryEndpoint: "http://telemetry:8086"
       zeroMQ: "edgex-core-data:5563"
+      telemetryEndpoint: "http://telemetry:8086"
+      telemetryDataStoreName: "BadgerBay"
       responseLimit: 10000
+      port: "8080"
+      serviceName: "Product Data Service"
     secrets:
       - source: environment-variables
         target: configuration.json
@@ -278,8 +269,8 @@ services:
           target: /run/secrets/ASNSchema.json
         - source: cluster-file-schema
           target: /run/secrets/clusterSchema.json
-   volumes:      
-   - ./data-provider-pipelines/:/pipelines/ 
+    volumes:      
+      - ./data-provider-pipelines/:/pipelines/ 
 
   edgex-demo-ui:
     image: rsp/edgex-demo-ui:dev
