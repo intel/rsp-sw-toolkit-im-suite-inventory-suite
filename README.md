@@ -2,7 +2,7 @@
 
 The Intel® RSP Inventory Suite is open source reference IoT software that enables you to gather data from multiple sensors and combine with your RFID data via edge analytics.
 
-The Inventory Suite software is installed on an edge computer and gathers data from Intel® RSP RFID Sensors (also often referred to as “RFID readers”) and other potential IoT sensors and data sources. The Intel® Inventory Suite has the capability to combine and run analytics on data from multiple sensors (e.g. – temperature, video, accelerometer). It also orchestrates the behavior of the RFID sensors to optimize the data collection process. The data can then move to the cloud or other connected devices in the customer’s infrastructure. Additionally, a cloud-based remote management console can be used to control and configure IOT deployments remotely.
+The Inventory Suite software is installed on an edge computer and gathers data from Intel® RSP RFID Sensors (also often referred to as “RFID readers”) and other potential IoT sensors and data sources. The Intel® Inventory Suite has the capability to combine and run analytics on data from multiple sensors (e.g. – temperature, video, accelerometer). It also orchestrates the behavior of the RFID sensors to optimize the data collection process. The data can then move to the cloud or other connected devices in the customer’s infrastructure. Additionally, a cloud-based remote management console can be used to control and configure IoT deployments remotely.
 
 Intel provides: Intel® RSP Inventory Suite (Edge Software) via open source software.intel.com and RSP Sensors can be purchased via an authorized distributor (ie – Atlas RFID)
 
