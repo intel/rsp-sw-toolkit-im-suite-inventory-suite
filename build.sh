@@ -16,7 +16,7 @@
  # and approved by Intel in writing.
  # Unless otherwise agreed by Intel in writing, you may not remove or alter this notice or any other
  # notice embedded in Materials by Intel or Intel's suppliers or licensors in any way.
-
+set -e
 echo
 echo "Installing the following dependencies..."
 echo "    1. make"
