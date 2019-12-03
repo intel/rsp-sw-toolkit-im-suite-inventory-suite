@@ -15,7 +15,7 @@ Intel does not provide: Instructions for connecting other third party sensors to
 ## Contents
   * [Inventory Suite Overview](#inventory-suite-overview)
   * [System Overview](#system-overview)
-  * [Prerequisites](#prerequisites)
+  * [Pre-requisites](#pre-requisites)
   * [Installing the RSP Inventory Suite](#installing-the-rsp-inventory-suite)
 
 ## Inventory Suite Overview
