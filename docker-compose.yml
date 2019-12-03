@@ -39,26 +39,26 @@ secrets:
   db-pass:
     file: ./secrets/dbPass
   db-setup:
-    file: ./secrets/db-setup.sh
+    file: ./secrets/createdb.sh
 
 services:  
 
   postgres-inventory:
-    image: postgres:11-apline
+    image: postgres:11-alpine
+    environment:
+      POSTGRES_MULTIPLE_DATABASES: inventory,product
+      POSTGRES_USER_FILE: /run/secrets/postgres-user
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres-pass
+      # encryption is handled by the overlay network;
+      # if the service is meant to be exposed externally,
+      # then SSLMode should be set to a higher level
+      DBSSLMODE: disable
     networks:
       internal-data-net:
     logging:
       options: {max-file: '5', max-size: 100m}
     volumes:
-      - "product-data:/var/lib/postgresql/data/"
-    environment:
-      POSTGRES_USER_FILE: /run/secrets/postgres-user
-      POSTGRES_PASSWORD_FILE: /run/secrets/postgres-pass
-      POSTGRES_MULTIPLE_DATABASES: "inventory,product"
-      # encryption is handled by the overlay network;
-      # if the service is meant to be exposed externally,
-      # then SSLMode should be set to a higher level
-      DBSSLMODE: disable
+      - "inventory-suite-data:/var/lib/postgresql/data/"
     secrets:
       - source: db-user
         target: postgres-user
