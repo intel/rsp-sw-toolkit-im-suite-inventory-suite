@@ -44,9 +44,9 @@ secrets:
 services:  
 
   postgres-inventory:
-    image: postgres:11-alpine
+    image: postgres:11
     environment:
-      POSTGRES_MULTIPLE_DATABASES: inventory,product
+      POSTGRES_MULTIPLE_DATABASES: "inventory,product"
       POSTGRES_USER_FILE: /run/secrets/postgres-user
       POSTGRES_PASSWORD_FILE: /run/secrets/postgres-pass
       # encryption is handled by the overlay network;
@@ -270,7 +270,7 @@ services:
         - source: cluster-file-schema
           target: /run/secrets/clusterSchema.json
     volumes:      
-      - ./data-provider-pipelines/:/pipelines/ 
+    - ./data-provider-pipelines/:/pipelines/ 
 
   edgex-demo-ui:
     image: rsp/edgex-demo-ui:dev
