@@ -41,6 +41,20 @@ secrets:
   db-setup:
     file: ./secrets/createdb.sh
 
+x-postgres: &postgres-settings
+  dbHost: "postgres-inventory"
+  dbPort: "5432"
+  dbSSLMode: "disable"
+
+x-telemetry: &telemetry-settings
+  telemetryEndpoint: "http://telemetry:8086"
+  telemetryDataStoreName: "BadgerBay"
+  
+x-logging: &logging
+  logging:
+    options: {max-file: '5', max-size: 100m}
+  
+
 services:  
 
   postgres-inventory:
@@ -52,11 +66,10 @@ services:
       # encryption is handled by the overlay network;
       # if the service is meant to be exposed externally,
       # then SSLMode should be set to a higher level
-      DBSSLMODE: disable
+      DBSSLMODE: disable 
     networks:
       internal-data-net:
-    logging:
-      options: {max-file: '5', max-size: 100m}
+    <<: *logging
     volumes:
       - "inventory-suite-data:/var/lib/postgresql/data/"
     secrets:
@@ -83,17 +96,13 @@ services:
       interval: 1m30s
       timeout: 10s
       retries: 3
-    logging:
-      options: {max-file: '5', max-size: 100m}
+    <<: *logging
     environment:
-      dbHost: "postgres-inventory"
-      dbPort: "5432"
+      <<: *postgres-settings
+      <<: *telemetry-settings
       dbName: "inventory"
-      dbSSLMode: "disable"
       loggingLevel: "debug"
       epcFilters: "[]"
-      telemetryEndpoint: "http://telemetry:8086"
-      telemetryDataStoreName: "BadgerBay"
       responseLimit: 10000      
       port: "8080"      
       cloudConnectorUrl: "http://cloud-connector:8080"
@@ -114,11 +123,6 @@ services:
       newerHandheldHavePriority: "true"
       cloudConnectorApiGatewayEndpoint: "/callwebhook"
       rfidAlertMessageEndpoint: "/rfid-alert/alertmessage"
-      eventDestination: "https://f6wtzvncad.execute-api.us-west-2.amazonaws.com/dev/events"
-      eventDestinationAuthEndpoint: ""
-      eventDestinationAuthType: ""
-      eventDestinationClientID: ""
-      eventDestinationClientSecret: ""
       dailyInventoryPercentageLabel: "daily_turn"
       probUnreadToReadLabel: "becoming_readable"
       probInStoreReadLabel: "being_read"
@@ -147,12 +151,10 @@ services:
       interval: 1m30s
       timeout: 10s
       retries: 3
-    logging:
-      options: {max-file: '5', max-size: 100m}
+    <<: *logging
     environment:      
+      <<: *telemetry-settings
       loggingLevel: "info"
-      telemetryEndpoint: "http://telemetry:8086"
-      telemetryDataStoreName: "BadgerBay"
       responseLimit: 10000
       secureMode: "true"
       skipCertVerify: "true"
@@ -178,14 +180,10 @@ services:
     user: "2000:2000"
     networks:
        - main-net
-    logging:
-      options:
-        max-size: "100m"
-        max-file: "5"
+    <<: *logging
     environment:
+      <<: *telemetry-settings
       loggingLevel: "info"
-      telemetryEndpoint: "http://telemetry:8086"
-      telemetryDataStoreName: "BadgerBay"
       responseLimit: 10000
       secureMode: "true"
       skipCertVerify: "true"
@@ -207,14 +205,12 @@ services:
       interval: 1m30s
       timeout: 10s
       retries: 3
-    logging:
-      options: {max-file: '5', max-size: 100m}
+    <<: *logging
     environment:                
+      <<: *postgres-settings
+      <<: *telemetry-settings
       loggingLevel: "info"
-      dbHost: "postgres-inventory"
-      dbPort: "5432"
       dbName: "product"
-      dbSSLMode: "disable"
       zeroMQ: "edgex-core-data:5563"
       telemetryEndpoint: "http://telemetry:8086"
       telemetryDataStoreName: "BadgerBay"
@@ -245,17 +241,13 @@ services:
       - main-net
     extra_hosts:
       - "mosquitto-server:172.17.0.1"
-    logging:
-      options:
-        max-size: "100m"
-        max-file: "5"    
+    <<: *logging
     environment:
+      <<: *telemetry-settings
       no_proxy: "cloud-connector,edgex-core-consul,edgex-core-data"     
       NO_PROXY: "cloud-connector,edgex-core-consul,edgex-core-data"
       serviceName : "Data Provider"
-      loggingLevel: "debug"
-      telemetryEndpoint: "http://telemetry:8086"
-      telemetryDataStoreName: "BadgerBay"
+      loggingLevel: "info"
       port: "8080"
       pipelinesDir: "/pipelines"
       templatesDir: "/templates"      
