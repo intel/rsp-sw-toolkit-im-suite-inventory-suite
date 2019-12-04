@@ -45,7 +45,10 @@ edgex-demo-ui:
 		 -t rsp/$@:dev \
 		 ./$@
 
-deploy: init
+secrets/db%: secrets/configuration.json
+	awk '/"db$*"/ {print gensub("\",?","","g",$$2)}' $^ > $@
+
+deploy: init secrets/dbUser secrets/dbPass
 	docker stack deploy \
 		--with-registry-auth \
 		--compose-file docker-compose.yml \
