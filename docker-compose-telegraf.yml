@@ -23,6 +23,13 @@ volumes:
 networks:
   main-net:
 
+configs:
+  telegraf-sys:
+    file: ./telegraf/telegraf-system.conf
+  telegraf-app:
+    file: ./telegraf/telegraf-application.conf
+
+
 services:
 
   telegraf-system:
@@ -35,7 +42,10 @@ services:
       - hostconfig:/mnt/hostconfig
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
-      - ./telegraf/telegraf-system.conf:/etc/telegraf/telegraf.conf
+    configs:
+      - source: telegraf-sys
+        target: /etc/telegraf/telegraf.conf
+        mode: 0444
   telegraf-application:
     image: telegraf:1.8    
     hostname: "${HOSTNAME}"
@@ -45,4 +55,7 @@ services:
           - telemetry
     volumes:
       - hostconfig:/mnt/hostconfig
-      - ./telegraf/telegraf-application.conf:/etc/telegraf/telegraf.conf
+    configs:
+      - source: telegraf-app
+        target: /etc/telegraf/telegraf.conf
+        mode: 0444
