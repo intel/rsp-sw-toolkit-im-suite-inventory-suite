@@ -82,11 +82,22 @@ in [configuration.json](secrets/configuration.json):
 When you deploy, the Makefile will use those values to generate some necessary files
 (`dbUser` and `dbPass`), which are passed as secrets to the `postgres` service.
 If you try to deploy before setting `dbPass`, you'll get an error saying 
-`You must set dbPass in configuration.json`. 
+`You must set dbPass in configuration.json`. You don't need to edit the `secrets/dbUser`
+or `secrets/dbPass` files -- those are automatically created by the Makefile. You only
+need to edit the `configuration.json` file.
+
+> Important Toubleshooting Tip: When the `postgres` service runs, it only runs its 
+> initialization if it hasn't done so before; if you run into an issue during setup
+> and want to try again, consider removing unused volumes, which can be done as so:
+>   - stop the services with `make stop` or `docker stack rm Inventory-Suite`
+>   - wait about 10s for all containers to stop; check with `docker ps`
+>   - remove stopped containers that weren't automatically cleaned up with `docker container prune -f`
+>   - remove volumes not attached to containers with `docker volume prune -f`
+
 
 ### Other Secrets
 There are some other secrets you can set in the 
-[secrets/configuration.json](secrets/configuration.json).
+[secrets/configuration.json](secrets/configuration.json), or you can leave them blank for now.
 Although the individual services describe the configuration values in more detail,
 here is a list of values you may consider setting:
 
