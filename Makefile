@@ -45,8 +45,13 @@ edgex-demo-ui:
 		 -t rsp/$@:dev \
 		 ./$@
 
-secrets/db%: secrets/configuration.json
-	awk '/"db$*"/ {print gensub("\",?","","g",$$2)}' $^ > $@
+secrets/db%: secrets/configuration.json 
+	@awk '/"db$*":\s*".*",?/ {\
+			gsub(/",?/,"",$$2);\
+			if(length($$2)) { print $$2; found=1; exit 0; }\
+		}\
+		END { if(!found) {print "You must set db$* in $^\n" > "/dev/stderr"; exit 1 }}'\
+			$^ > $@
 
 deploy: init secrets/dbUser secrets/dbPass
 	docker stack deploy \

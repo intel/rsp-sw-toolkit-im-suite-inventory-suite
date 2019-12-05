@@ -73,24 +73,22 @@ as configuration files in the containers for their respective services, so you'l
 edit them before launching.
 
 ### Database Username and Password
-When the `postgres` service of the Inventory Suite runs for the first time, it looks for
-a couple of files -- one containing the database username and another containing the password.
-These values then persist to future runs. Edit the values in these two files to set them: 
+Before launching, you should configure a username/password pair for the database
+in [configuration.json](secrets/configuration.json):
 
-- [username](secrets/dbUser)
-- [password](secrets/dbPass)
+- username: `dbUser`; initially set to `postgres`, but it's arbitrary.
+- password: `dbPass`; initially empty; you must set it before deploying. 
 
-Other services that connect to the database then need the same username/password pair, so 
-they must also be set to the same values in [configuration.json](secrets/configuration.json):
-
-- username: `dbUser`
-- password: `dbPass`
+When you deploy, the Makefile will use those values to generate some necessary files
+(`dbUser` and `dbPass`), which are passed as secrets to the `postgres` service.
+If you try to deploy before setting `dbPass`, you'll get an error saying 
+`You must set dbPass in configuration.json`. 
 
 ### Other Secrets
 There are some other secrets you can set in the 
 [secrets/configuration.json](secrets/configuration.json).
 Although the individual services describe the configuration values in more detail,
-here is a list of values you should consider setting:
+here is a list of values you may consider setting:
 
 - eventDestination, heartbeastDestination, alertDestination: URLs to which certain messages are sent
 - eventDestinationAuthType, alertDestinationAuthType: type (e.g., oauth) for authentication, if these endpoints use it 
