@@ -18,7 +18,7 @@
 version: '3.4'
 
 volumes:
-  inventory-suite-data:  
+  inventory-suite-data:
 
 networks:
   main-net:
@@ -34,22 +34,49 @@ secrets:
     file: ./secrets/schemas/ASNSchema.json
   cluster-file-schema:
     file: ./secrets/schemas/ClusterSchema.json
+  db-user:
+    file: ./secrets/dbUser
+  db-pass:
+    file: ./secrets/dbPass
+  db-setup:
+    file: ./secrets/createdb.sh
+
+x-postgres: &postgres-settings
+  dbHost: "postgres-inventory"
+  dbPort: "5432"
+  dbSSLMode: "require"
+
+x-telemetry: &telemetry-settings
+  telemetryEndpoint: "http://telemetry:8086"
+  telemetryDataStoreName: "BadgerBay"
+  
+x-logging: &logging
+  logging:
+    options: {max-file: '5', max-size: 100m}
+  
 
 services:  
-  
+
   postgres-inventory:
-    image: postgres:11-alpine
+    image: postgres:11
     environment:
-      - POSTGRES_MULTIPLE_DATABASES=inventory,product
-    ports:
-      - "5432:5432"
+      POSTGRES_MULTIPLE_DATABASES: "inventory,product"
+      POSTGRES_USER_FILE: /run/secrets/postgres-user
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres-pass
     networks:
       internal-data-net:
-    logging:
-      options: {max-file: '5', max-size: 100m}
+    <<: *logging
     volumes:
-      - "inventory-suite-data:/var/lib/postgresql/data/"   
-      - ./db-init-scripts:/docker-entrypoint-initdb.d
+      - "inventory-suite-data:/var/lib/postgresql/data/"
+    secrets:
+      - source: db-user
+        target: postgres-user
+      - source: db-pass
+        target: postgres-pass
+      - source: db-setup
+        target: /docker-entrypoint-initdb.d/createdb.sh
+        uid: '999' # postgres UID in this container
+        mode: 0700
 
   inventory:    
     image: rsp/inventory-service:dev
@@ -65,19 +92,13 @@ services:
       interval: 1m30s
       timeout: 10s
       retries: 3
-    logging:
-      options: {max-file: '5', max-size: 100m}
+    <<: *logging
     environment:
-      dbHost: "postgres-inventory"
-      dbUser: "postgres"
-      dbPass: ""
-      dbPort: "5432"
+      <<: *postgres-settings
+      <<: *telemetry-settings
       dbName: "inventory"
-      dbSSLMode: "disable"
       loggingLevel: "debug"
       epcFilters: "[]"
-      telemetryEndpoint: "http://telemetry:8086"
-      telemetryDataStoreName: "BadgerBay"
       responseLimit: 10000      
       port: "8080"      
       cloudConnectorUrl: "http://cloud-connector:8080"
@@ -98,11 +119,6 @@ services:
       newerHandheldHavePriority: "true"
       cloudConnectorApiGatewayEndpoint: "/callwebhook"
       rfidAlertMessageEndpoint: "/rfid-alert/alertmessage"
-      eventDestination: "https://f6wtzvncad.execute-api.us-west-2.amazonaws.com/dev/events"
-      eventDestinationAuthEndpoint: ""
-      eventDestinationAuthType: ""
-      eventDestinationClientID: ""
-      eventDestinationClientSecret: ""
       dailyInventoryPercentageLabel: "daily_turn"
       probUnreadToReadLabel: "becoming_readable"
       probInStoreReadLabel: "being_read"
@@ -111,15 +127,14 @@ services:
       advancedShippingNoticeFacilityID: "UNDEFINED_FACILITY"
       rulesUrl: ""
       cloudConnectorRetrySeconds: 30
-      proprietaryTagProductIdx: 2
-      proprietaryTagBitBoundary: "8.44.44"
-      tagURIAuthorityName: "example.com"
-      tagURIAuthorityDate: "2019-01-01"
       dailyTurnMinimumDataPoints: 2
       dailyTurnHistoryMaximum: 25
       dailyTurnComputeUsingMedian: "false"
       useComputedDailyTurnInConfidence: "true"
-      probPlugin: "false"    
+      probPlugin: "false"
+    secrets:
+      - source: environment-variables
+        target: configuration.json
 
   rfid-alert:
     image: rsp/rfid-alert-service:dev
@@ -132,12 +147,10 @@ services:
       interval: 1m30s
       timeout: 10s
       retries: 3
-    logging:
-      options: {max-file: '5', max-size: 100m}
+    <<: *logging
     environment:      
+      <<: *telemetry-settings
       loggingLevel: "info"
-      telemetryEndpoint: "http://telemetry:8086"
-      telemetryDataStoreName: "BadgerBay"
       responseLimit: 10000
       secureMode: "true"
       skipCertVerify: "true"
@@ -152,29 +165,21 @@ services:
       cloudConnectorEndpoint: "/callwebhook"
       heartbeatEndpoint: "/heartbeat"
       mappingSkuEndpoint: "/skus"
-      alertDestination: "https://5w1qbo67lh.execute-api.us-west-2.amazonaws.com/dev/alerts"
-      heartbeatDestination: "https://5w1qbo67lh.execute-api.us-west-2.amazonaws.com/dev/heartbeats"
       batchSizeMax: 50
       sendNotWhitelistedAlert: "false"
-      epcToWrin: "false"
-      alertDestinationAuthEndpoint: ""
-      alertDestinationAuthType: ""
-      alertDestinationClientID: ""
-      alertDestinationClientSecret: ""
+    secrets:
+      - source: environment-variables
+        target: configuration.json
 
   cloud-connector:
     image: rsp/cloud-connector-service:dev
     user: "2000:2000"
     networks:
        - main-net
-    logging:
-      options:
-        max-size: "100m"
-        max-file: "5"
+    <<: *logging
     environment:
+      <<: *telemetry-settings
       loggingLevel: "info"
-      telemetryEndpoint: "http://telemetry:8086"
-      telemetryDataStoreName: "BadgerBay"
       responseLimit: 10000
       secureMode: "true"
       skipCertVerify: "true"
@@ -196,22 +201,21 @@ services:
       interval: 1m30s
       timeout: 10s
       retries: 3
-    logging:
-      options: {max-file: '5', max-size: 100m}
+    <<: *logging
     environment:                
+      <<: *postgres-settings
+      <<: *telemetry-settings
       loggingLevel: "info"
-      dbHost: "postgres-inventory"
-      dbUser: "postgres"
-      dbPass: ""
-      dbPort: "5432"
       dbName: "product"
-      dbSSLmode: "disable"
       zeroMQ: "edgex-core-data:5563"
       telemetryEndpoint: "http://telemetry:8086"
       telemetryDataStoreName: "BadgerBay"
       responseLimit: 10000
       port: "8080"
-      serviceName: "Product Data Service"      
+      serviceName: "Product Data Service"
+    secrets:
+      - source: environment-variables
+        target: configuration.json
 
   mqtt-device-service:
     image: rsp/mqtt-device-service:dev
@@ -233,17 +237,13 @@ services:
       - main-net
     extra_hosts:
       - "mosquitto-server:172.17.0.1"
-    logging:
-      options:
-        max-size: "100m"
-        max-file: "5"    
+    <<: *logging
     environment:
+      <<: *telemetry-settings
       no_proxy: "cloud-connector,edgex-core-consul,edgex-core-data"     
       NO_PROXY: "cloud-connector,edgex-core-consul,edgex-core-data"
       serviceName : "Data Provider"
-      loggingLevel: "debug"
-      telemetryEndpoint: "http://telemetry:8086"
-      telemetryDataStoreName: "BadgerBay"
+      loggingLevel: "info"
       port: "8080"
       pipelinesDir: "/pipelines"
       templatesDir: "/templates"      
@@ -258,7 +258,7 @@ services:
         - source: cluster-file-schema
           target: /run/secrets/clusterSchema.json
     volumes:      
-      - ./data-provider-pipelines/:/pipelines/ 
+    - ./data-provider-pipelines/:/pipelines/ 
 
   edgex-demo-ui:
     image: rsp/edgex-demo-ui:dev

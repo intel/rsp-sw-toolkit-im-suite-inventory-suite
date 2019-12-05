@@ -66,6 +66,49 @@ $ export GIT_TOKEN=YOUR_GIT_TOKEN
 ```bash
 $ git clone -b edinburgh --recurse-submodules https://github.impcloud.net/RSP-Inventory-Suite/inventory-suite.git
 ```
+## Secrets
+The [secrets](secrets) directory contains configuration files with sensitive information
+needed by the system (passwords, client secrets, and the like). These secrets are mounted
+as configuration files in the containers for their respective services, so you'll need to
+edit them before launching.
+
+### Database Username and Password
+Before launching, you should configure a username/password pair for the database
+in [configuration.json](secrets/configuration.json):
+
+- username: `dbUser`; initially set to `postgres`, but it's arbitrary.
+- password: `dbPass`; initially empty; you must set it before deploying. 
+
+When you deploy, the Makefile will use those values to generate some necessary files
+(`dbUser` and `dbPass`), which are passed as secrets to the `postgres` service.
+If you try to deploy before setting `dbPass`, you'll get an error saying 
+`You must set dbPass in configuration.json`. 
+
+### Other Secrets
+There are some other secrets you can set in the 
+[secrets/configuration.json](secrets/configuration.json).
+Although the individual services describe the configuration values in more detail,
+here is a list of values you may consider setting:
+
+- eventDestination, heartbeastDestination, alertDestination: URLs to which certain messages are sent
+- eventDestinationAuthType, alertDestinationAuthType: type (e.g., oauth) for authentication, if these endpoints use it 
+- eventDestinationAuthEndpoint, alertDestinationAuthEndpoint: for token-based auth, the URL for tokens
+- eventDestinationClientID, alertDestinationClientID: client ID for token-based auth
+- eventDestinationClientSecret, eventDestinationClientSecret: client secret for token-based auth
+
+If your environment has non-EPC-encoded tags, the proprietary tag configuration items can be set to
+define how those tags are decoded to URIs; otherwise, they can be left alone. The service docs has 
+more information about their meaning, but here's a brief rundown:
+
+- proprietaryTagBitBoundary: a string of "."-delimited ints indicating the bit-width of each tag field
+- proprietaryTagProductIdx: an integer indicating the 0-based field index containing the product ID
+- tagURIAuthorityName: the URL used for constructing the "tag" URN
+- tagURIAuthorityDate: a "YYYY-MM-dd" on which the tagURIAuthorityName was owned by the URN minter.
+
+
+The keys under `data-provider-service` typically do not need to be edited, but you can read more
+about them in the documentation for that service.
+
 
 ### Deploy Inventory Suite and EdgeX services
 
