@@ -44,7 +44,7 @@ secrets:
 x-postgres: &postgres-settings
   dbHost: "postgres-inventory"
   dbPort: "5432"
-  dbSSLMode: "require"
+  dbSSLMode: "disable"
 
 x-telemetry: &telemetry-settings
   telemetryEndpoint: "http://telemetry:8086"
