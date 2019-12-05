@@ -144,3 +144,22 @@ services:
       - log-data:/edgex/logs
       - consul-config:/consul/config
       - consul-data:/consul/data
+      
+  notifications:
+    image: edgexfoundry/docker-support-notifications-go:1.0.1
+    ports:
+      - "48060:48060"
+    container_name: edgex-support-notifications
+    hostname: edgex-support-notifications
+    networks:
+      edgex-network:
+        aliases:
+            - edgex-support-notifications
+    volumes:
+      - db-data:/data/db
+      - log-data:/edgex/logs
+      - consul-config:/consul/config
+      - consul-data:/consul/data
+      - /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt
+    depends_on:
+      - logging
