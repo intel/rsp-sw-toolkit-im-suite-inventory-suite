@@ -46,12 +46,7 @@ edgex-demo-ui:
 		 ./$@
 
 secrets/db%: secrets/configuration.json 
-	@awk '/"db$*":\s*".*",?/ {\
-			gsub(/",?/,"",$$2);\
-			if(length($$2)) { print $$2; found=1; exit 0; }\
-		}\
-		END { if(!found) {print "You must set db$* in $^\n" > "/dev/stderr"; exit 1 }}'\
-			$^ > $@
+	@python secrets/parseConf.py $^ db$* $@
 
 deploy: init secrets/dbUser secrets/dbPass
 	docker stack deploy \
