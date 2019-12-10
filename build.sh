@@ -47,7 +47,7 @@ echo
 echo "Building and Deploying Intel Inventory Suite and EdgeX..."
 echo
 
-if sudo -E make build 
+if sudo -E make -j build 
 then   
   if sudo make deploy 
   then     
