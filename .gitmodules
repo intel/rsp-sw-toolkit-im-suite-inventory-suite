@@ -18,11 +18,10 @@
 	path = inventory-service
 	url = https://github.impcloud.net/RSP-Inventory-Suite/inventory-service.git
 	branch = master
-[submodule "edgex-demo-ui"]
-	path = edgex-demo-ui
-	url = https://github.impcloud.net/RSP-Inventory-Suite/edgex-demo-ui.git
-	branch = master
 [submodule "data-provider-service"]
 	path = data-provider-service
 	url = https://github.impcloud.net/RSP-Inventory-Suite/data-provider-service.git
 	branch = master
+[submodule "demo-ui"]
+	path = demo-ui
+	url = https://github.impcloud.net/RSP-Inventory-Suite/demo-ui.git
