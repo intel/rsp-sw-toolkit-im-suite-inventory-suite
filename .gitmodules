@@ -25,3 +25,4 @@
 [submodule "demo-ui"]
 	path = demo-ui
 	url = https://github.impcloud.net/RSP-Inventory-Suite/demo-ui.git
+	branch = master
