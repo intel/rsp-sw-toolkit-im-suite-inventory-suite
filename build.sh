@@ -69,6 +69,7 @@ then
       echo "Not able to apply index to EdgeX Mongo. Exiting..."
     else
      echo "EdgeX and Inventory Suite successfully deployed!"
+     echo 0
     fi    
   fi
   exit 1
