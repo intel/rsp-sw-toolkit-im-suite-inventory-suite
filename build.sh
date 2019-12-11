@@ -47,7 +47,7 @@ echo
 echo "Building and Deploying Intel Inventory Suite and EdgeX..."
 echo
 
-if sudo -E make build 
+if sudo -E make -j build 
 then   
   if sudo make deploy 
   then     
@@ -58,7 +58,7 @@ then
     RETRY=5
     i=0
     while [ $i -lt $RETRY ]; do        
-        sudo docker exec -it $(docker ps | awk '{print $NF}' | grep -w Inventory-Suite-Dev_mongo.1) mongo localhost/coredata --eval "db.reading.createIndex({uuid:1})" && echo $?
+        sudo docker exec -it $(sudo docker ps | awk '{print $NF}' | grep -w Inventory-Suite-Dev_mongo.1) mongo localhost/coredata --eval "db.reading.createIndex({uuid:1})" && echo $?
         [[ $? -eq 0 ]] && break
         echo "Retries...${i}"        
         sleep 5

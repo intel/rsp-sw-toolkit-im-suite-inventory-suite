@@ -267,8 +267,8 @@ services:
     volumes:
     - ./data-provider-pipelines/:/pipelines/
 
-  edgex-demo-ui:
-    image: rsp/edgex-demo-ui:dev
+  demo-ui:
+    image: rsp/demo-ui:dev
     user: "2000:2000"
     ports:
       - "4200:4200"
