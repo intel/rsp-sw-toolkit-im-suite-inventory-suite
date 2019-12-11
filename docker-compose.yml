@@ -47,8 +47,8 @@ x-postgres: &postgres-settings
   dbSSLMode: "disable"
 
 x-telemetry: &telemetry-settings
-  telemetryEndpoint: "http://telemetry:8086"
-  telemetryDataStoreName: "BadgerBay"
+  telemetryEndpoint: ""
+  telemetryDataStoreName: ""
   
 x-logging: &logging
   logging:
