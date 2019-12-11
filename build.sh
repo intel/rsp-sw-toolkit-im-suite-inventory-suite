@@ -71,7 +71,7 @@ then
      echo "EdgeX and Inventory Suite successfully deployed!"
     fi    
   fi
-  exit $?
+  exit 1
 fi
-exit $?
+exit 1
 
