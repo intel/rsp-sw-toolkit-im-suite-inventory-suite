@@ -47,7 +47,7 @@ echo
 echo "Building and Deploying Intel Inventory Suite and EdgeX..."
 echo
 
-if sudo -E make -j build 
+if sudo -E make build 
 then   
   if sudo make deploy 
   then     
@@ -69,7 +69,7 @@ then
       echo "Not able to apply index to EdgeX Mongo. Exiting..."
     else
      echo "EdgeX and Inventory Suite successfully deployed!"
-     echo 0
+     exit 0
     fi    
   fi
   exit 1
