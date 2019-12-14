@@ -15,10 +15,10 @@
  # Unless otherwise agreed by Intel in writing, you may not remove or alter this notice or any other
  # notice embedded in Materials by Intel or Intel's suppliers or licensors in any way.
 
-.PHONY: build deploy stop grafana init 
+.PHONY: build deploy stop init
 
 MICROSERVICES=inventory-service cloud-connector-service rfid-alert-service product-data-service mqtt-device-service data-provider-service
-BUILDABLE=$(MICROSERVICES) edgex-demo-ui
+BUILDABLE=$(MICROSERVICES) demo-ui
 .PHONY: $(BUILDABLE)
 
 GIT_SHA=$(shell git rev-parse HEAD)
@@ -35,7 +35,7 @@ $(MICROSERVICES):
 		 -t rsp/$@:dev \
 		 ./$@
 
-edgex-demo-ui:
+demo-ui:
 	# uses a different Dockerfile name and lacks GIT_TOKEN
 	docker build --rm \
 		--build-arg http_proxy=${http_proxy} \
@@ -53,7 +53,6 @@ deploy: init secrets/dbUser secrets/dbPass
 		--with-registry-auth \
 		--compose-file docker-compose.yml \
 		--compose-file docker-compose-edinburgh-1.0.1.yml \
-		--compose-file docker-compose-telegraf.yml \
 		Inventory-Suite-Dev
 
 init: 

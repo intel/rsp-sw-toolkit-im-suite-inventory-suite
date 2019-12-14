@@ -58,7 +58,7 @@ then
     RETRY=5
     i=0
     while [ $i -lt $RETRY ]; do        
-        sudo docker exec -it $(docker ps | awk '{print $NF}' | grep -w Inventory-Suite-Dev_mongo.1) mongo localhost/coredata --eval "db.reading.createIndex({uuid:1})" && echo $?
+        sudo docker exec -it $(sudo docker ps | awk '{print $NF}' | grep -w Inventory-Suite-Dev_mongo.1) mongo localhost/coredata --eval "db.reading.createIndex({uuid:1})" && echo $?
         [[ $? -eq 0 ]] && break
         echo "Retries...${i}"        
         sleep 5
@@ -69,9 +69,10 @@ then
       echo "Not able to apply index to EdgeX Mongo. Exiting..."
     else
      echo "EdgeX and Inventory Suite successfully deployed!"
+     exit 0
     fi    
   fi
-  exit $?
+  exit 1
 fi
-exit $?
+exit 1
 

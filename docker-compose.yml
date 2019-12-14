@@ -47,8 +47,8 @@ x-postgres: &postgres-settings
   dbSSLMode: "disable"
 
 x-telemetry: &telemetry-settings
-  telemetryEndpoint: "http://telemetry:8086"
-  telemetryDataStoreName: "BadgerBay"
+  telemetryEndpoint: ""
+  telemetryDataStoreName: ""
   
 x-logging: &logging
   logging:
@@ -59,6 +59,7 @@ services:
 
   postgres-inventory:
     image: postgres:11
+    user: "999:999"
     environment:
       POSTGRES_MULTIPLE_DATABASES: "inventory,product"
       POSTGRES_USER_FILE: /run/secrets/postgres-user
@@ -67,15 +68,19 @@ services:
       internal-data-net:
     <<: *logging
     volumes:
-      - "inventory-suite-data:/var/lib/postgresql/data/"
+      - source: inventory-suite-data
+        target: /var/lib/postgresql/data/
+        type: volume
     secrets:
       - source: db-user
         target: postgres-user
+        uid: '999' 
       - source: db-pass
         target: postgres-pass
+        uid: '999' 
       - source: db-setup
         target: /docker-entrypoint-initdb.d/createdb.sh
-        uid: '999' # postgres UID in this container
+        uid: '999' 
         mode: 0700
 
   inventory:    
@@ -219,6 +224,7 @@ services:
 
   mqtt-device-service:
     image: rsp/mqtt-device-service:dev
+    user: "2000:2000"
     ports:
       - "49982:49982"
     networks:
@@ -232,6 +238,7 @@ services:
 
   data-provider:
     image: rsp/data-provider-service:dev
+    user: "2000:2000"
     networks:      
       - edgex-network
       - main-net
@@ -257,10 +264,11 @@ services:
           target: /run/secrets/ASNSchema.json
         - source: cluster-file-schema
           target: /run/secrets/clusterSchema.json
-    volumes:      
-    - ./data-provider-pipelines/:/pipelines/ 
+    volumes:
+    - ./data-provider-pipelines/:/pipelines/
 
-  edgex-demo-ui:
-    image: rsp/edgex-demo-ui:dev
+  demo-ui:
+    image: rsp/demo-ui:dev
+    user: "2000:2000"
     ports:
       - "4200:4200"
