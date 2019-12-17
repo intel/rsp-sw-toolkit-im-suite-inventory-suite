@@ -140,4 +140,4 @@ $ sudo make stop
 ### Secure PostgreSQL database
 
 Although Docker swarm comes secure out the box using gossip protocol, if you want to increase the security between client/server communication, PostgreSQL has a native support for SSL connections. [SSL Support](https://www.postgresql.org/docs/9.1/libpq-ssl.html).
-Be aware that clients will require openssl installed.
+Be aware that clients will require openssl libraries installed.
