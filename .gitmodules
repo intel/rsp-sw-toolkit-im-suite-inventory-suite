@@ -10,8 +10,8 @@
 	path = cloud-connector-service
 	url = https://github.com/intel/rsp-sw-toolkit-im-suite-cloud-connector-service.git
 	branch = master
-[submodule "rfid-alert-service"]
-	path = rfid-alert-service
+[submodule "alert-service"]
+	path = alert-service
 	url = https://github.com/intel/rsp-sw-toolkit-im-suite-alert-service.git
 	branch = master
 [submodule "inventory-service"]

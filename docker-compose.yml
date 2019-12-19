@@ -97,7 +97,7 @@ services:
       port: "8080"      
       cloudConnectorUrl: "http://cloud-connector:8080"
       mappingSkuUrl: "http://product-data:8080/skus/"
-      rfidAlertURL: "http://rfid-alert:8080"
+      rfidAlertURL: "http://alert:8080"
       serviceName: "Inventory Service"
       ageOuts: "front:10,back:60"
       dailyInventoryPercentage: "0.01"
@@ -112,7 +112,7 @@ services:
       triggerRulesOnFixedTags: "true"
       newerHandheldHavePriority: "true"
       cloudConnectorApiGatewayEndpoint: "/callwebhook"
-      rfidAlertMessageEndpoint: "/rfid-alert/alertmessage"
+      rfidAlertMessageEndpoint: "/alert/alertmessage"
       dailyInventoryPercentageLabel: "daily_turn"
       probUnreadToReadLabel: "becoming_readable"
       probInStoreReadLabel: "being_read"
@@ -130,8 +130,8 @@ services:
       - source: environment-variables
         target: configuration.json
 
-  rfid-alert:
-    image: rsp/rfid-alert-service:dev
+  alert:
+    image: rsp/alert-service:dev
     user: "2000:2000"
     networks:
       - main-net

@@ -6,7 +6,7 @@
 
 .PHONY: build deploy stop init
 
-MICROSERVICES=inventory-service cloud-connector-service rfid-alert-service product-data-service mqtt-device-service data-provider-service
+MICROSERVICES=inventory-service cloud-connector-service alert-service product-data-service mqtt-device-service data-provider-service
 BUILDABLE=$(MICROSERVICES) demo-ui
 .PHONY: $(BUILDABLE)
 
