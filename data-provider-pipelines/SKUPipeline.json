@@ -16,7 +16,7 @@
           "dataType": "SKU_data",
           "lastUpdatedKey": "sku.lastUpdated",
           "dataSchemaName": "ProdSchema.json",
-          "dataEndpoint": "https://f6wtzvncad.execute-api.us-west-2.amazonaws.com/dev/productitems",
+          "dataEndpoint": "",
           "siteID": "rrs-gateway"
         }
       }

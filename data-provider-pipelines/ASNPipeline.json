@@ -13,7 +13,7 @@
       "raw": {
         "inputs": {
           "lastUpdatedKey": "asn.lastUpdated",
-          "dataEndpoint": "https://f6wtzvncad.execute-api.us-west-2.amazonaws.com/dev/shippingnotices",
+          "dataEndpoint": "",
           "siteID": "rrs-gateway",
           "deviceName": "ASN_Data_Device",
           "dataType": "ASN_data",

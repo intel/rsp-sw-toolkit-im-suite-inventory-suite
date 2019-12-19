@@ -16,7 +16,6 @@ build: $(BUILDABLE)
 
 $(MICROSERVICES):
 	docker build --rm \
-		--build-arg GIT_TOKEN=${GIT_TOKEN} \
 		--build-arg http_proxy=${http_proxy} \
 		--build-arg https_proxy=${https_proxy} \
 		-f $@/Dockerfile_dev \
@@ -25,7 +24,6 @@ $(MICROSERVICES):
 		 ./$@
 
 demo-ui:
-	# uses a different Dockerfile name and lacks GIT_TOKEN
 	docker build --rm \
 		--build-arg http_proxy=${http_proxy} \
 		--build-arg https_proxy=${https_proxy} \
@@ -34,7 +32,7 @@ demo-ui:
 		 -t rsp/$@:dev \
 		 ./$@
 
-secrets/db%: secrets/configuration.json 
+secrets/db%: secrets/configuration.json
 	@python secrets/parseConf.py $^ db$* $@
 
 deploy: init secrets/dbUser secrets/dbPass
@@ -44,9 +42,9 @@ deploy: init secrets/dbUser secrets/dbPass
 		--compose-file docker-compose-edinburgh-1.0.1.yml \
 		Inventory-Suite-Dev
 
-init: 
+init:
 	docker swarm init 2>/dev/null || true
 
-stop:	
+stop:
 	docker stack rm Inventory-Suite-Dev
 
