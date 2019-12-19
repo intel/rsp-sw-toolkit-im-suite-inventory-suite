@@ -1,28 +1,28 @@
 [submodule "product-data-service"]
 	path = product-data-service
-	url = https://github.impcloud.net/RSP-Inventory-Suite/product-data-service.git
+	url = https://github.com/intel/rsp-sw-toolkit-im-suite-product-data-service.git
 	branch = master
 [submodule "mqtt-device-service"]
 	path = mqtt-device-service
-	url = https://github.impcloud.net/RSP-Inventory-Suite/mqtt-device-service.git
+	url = https://github.com/intel/rsp-sw-toolkit-im-suite-mqtt-device-service.git
 	branch = master
 [submodule "cloud-connector-service"]
 	path = cloud-connector-service
-	url = https://github.impcloud.net/RSP-Inventory-Suite/cloud-connector-service.git
+	url = https://github.com/intel/rsp-sw-toolkit-im-suite-cloud-connector-service.git
 	branch = master
 [submodule "rfid-alert-service"]
 	path = rfid-alert-service
-	url = https://github.impcloud.net/RSP-Inventory-Suite/rfid-alert-service.git
+	url = https://github.com/intel/rsp-sw-toolkit-im-suite-alert-service.git
 	branch = master
 [submodule "inventory-service"]
 	path = inventory-service
-	url = https://github.impcloud.net/RSP-Inventory-Suite/inventory-service.git
+	url = https://github.com/intel/rsp-sw-toolkit-im-suite-inventory-service.git
 	branch = master
 [submodule "data-provider-service"]
 	path = data-provider-service
-	url = https://github.impcloud.net/RSP-Inventory-Suite/data-provider-service.git
+	url = https://github.com/intel/rsp-sw-toolkit-im-suite-data-provider-service.git
 	branch = master
 [submodule "demo-ui"]
 	path = demo-ui
-	url = https://github.impcloud.net/RSP-Inventory-Suite/demo-ui.git
+	url = https://github.com/intel/rsp-sw-toolkit-im-suite-demo-ui.git
 	branch = master

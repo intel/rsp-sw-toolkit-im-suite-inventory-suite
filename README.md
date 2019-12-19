@@ -54,18 +54,10 @@ sudo apt -y install docker.io
 ## Installing the RSP Inventory Suite
 
 ### Clone repo and submodules
-
-To avoid git requesting authentication, run the following commands:
-
 ```bash
-$ git config --global credential.helper store
-$ set +x && echo "https://YOUR_GIT_TOKEN:x-oauth-basic@github.impcloud.net" > ~/.git-credentials
-$ export GIT_TOKEN=YOUR_GIT_TOKEN
+$ git clone -b <branch_name> --recurse-submodules https://github.com/intel/rsp-sw-toolkit-im-suite-inventory-suite
 ```
 
-```bash
-$ git clone -b edinburgh --recurse-submodules https://github.impcloud.net/RSP-Inventory-Suite/inventory-suite.git
-```
 ## Secrets
 The [secrets](secrets) directory contains configuration files with sensitive information
 needed by the system (passwords, client secrets, and the like). These secrets are mounted
