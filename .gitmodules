@@ -10,10 +10,6 @@
 	path = cloud-connector-service
 	url = https://github.com/intel/rsp-sw-toolkit-im-suite-cloud-connector-service.git
 	branch = master
-[submodule "alert-service"]
-	path = alert-service
-	url = https://github.com/intel/rsp-sw-toolkit-im-suite-alert-service.git
-	branch = master
 [submodule "inventory-service"]
 	path = inventory-service
 	url = https://github.com/intel/rsp-sw-toolkit-im-suite-inventory-service.git
@@ -25,4 +21,8 @@
 [submodule "demo-ui"]
 	path = demo-ui
 	url = https://github.com/intel/rsp-sw-toolkit-im-suite-demo-ui.git
+	branch = master
+[submodule "alert-service"]
+	path = alert-service
+	url = https://github.com/intel/rsp-sw-toolkit-im-suite-alert-service.git
 	branch = master
