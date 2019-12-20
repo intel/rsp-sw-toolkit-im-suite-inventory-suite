@@ -36,11 +36,24 @@ The image below is an example of a robust inventory management system built on I
 
  ![](docs/solution-structure.png)
 
+## Warnings
+> ![](docs/images/alert-48.png) **Warning**
+> 
+> This software is a **Dev-Kit** and is **NOT** intended to be deployed into
+> production without extra steps to **secure and harden your installation**.
+> This is imperative to complete before deploying this software outside of a development environment.
+> **Please consult our [Hardening Guide](#hardening-your-installation) for more information.**
+
 ## Pre-requisites 
 
 ### Intel® RSP Controller Application
 
-*   :warning: :warning: Before starting this Getting Started Guide for the Intel® RSP Inventory Suite, you must have completed the [*Getting Started with Intel® RFID Sensor Platform (RSP) on Linux*](https://software.intel.com/en-us/getting-started-with-intel-rfid-sensor-platform-on-linux)
+> ![](docs/images/alert-24.png) **Notice**
+> 
+> Before starting this Getting Started Guide for the Intel® RSP 
+> Inventory Suite, you must have completed the [*Getting Started with
+> Intel® RFID Sensor Platform (RSP) on Linux*](https://software.intel.com/en-us/getting-started-with-intel-rfid-sensor-platform-on-linux)
+
 *   This document assumes an edge computer running Ubuntu 18.04, which is preinstalled on the RDK, but other Linux distributions compatible with JRE 8+ should also be compatible with RSP.
 *   Must have the RSP Controller Application running.
 
@@ -128,6 +141,54 @@ $ ./build.sh
 ```bash
 $ sudo make stop
 ```
+
+## Hardening your installation
+### Encrypting Docker Data
+Encrypting data in Docker volumes and between Docker nodes is wise practice,
+particularly if you're handling data of any sensitivity.
+When doing so, there are many different options available,
+and which to choose depends largely upon factors specific to your application
+and goals.
+
+Below is a list of suggestions with some rough ideas of pros and cons.
+Remember that technology changes rapidly,
+so it's worth regularly evaluating whether 
+any particular solution continues to meet your needs
+and security requirements; moreover, while this advice attempts to be relevant,
+it's also important to examine whether information in this guide
+still meets security best-practices.
+
+In short, there is no "one-size-fits-all" solution,
+and you should consider the information here as a starting point for further research.
+
+### The easy stuff
+First of all, you should ensure your host(s) are at least following basic
+[Docker security best practices](https://docs.docker.com/engine/security/security/).
+
+### Encrypting data at rest
+
+#### Full drive encryption
+Ubuntu allows you to encrypt the entire OS during the installation step:
+
+![](docs/images/ubuntu-encrypt-disk.png)
+
+Selecting this will prompt you to create a security key that will be needed on startup to decrypt the drive:
+
+![](docs/images/ubuntu-encrypt-choose-security-key.jpg)
+
+#### Volume encryption
+You can configure Docker to use various different drivers when creating and using Docker volumes. At least one of them allow you to encrypt the data at rest.
+
+[Docker Data Volume Snapshots and Encryption with LVM and LUKS (Blog)](https://medium.com/@kalahari/docker-data-volume-snapshots-and-encryption-with-lvm-and-luks-ce80e0555225)
+
+[Docker Volume Driver for lvm volumes (GitHub)](https://github.com/containers/docker-lvm-plugin)
+
+### TLS
+By default Docker swarm nodes will encrypt and authenticate information they exchange between nodes.
+
+In order to encypt the communication between ALL containers/services within Docker, create an Overlay network with encryption enabled.
+
+[Docker swarm mode overlay network security model](https://docs.docker.com/v17.09/engine/userguide/networking/overlay-security-model/)
 
 ### Secure PostgreSQL database
 
