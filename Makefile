@@ -33,7 +33,7 @@ demo-ui:
 		 ./$@
 
 secrets/db%: secrets/configuration.json
-	@python secrets/parseConf.py $^ db$* $@
+	@python3 secrets/parseConf.py $^ db$* $@
 
 deploy: init secrets/dbUser secrets/dbPass
 	docker stack deploy \
